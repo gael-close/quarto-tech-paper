@@ -1,5 +1,7 @@
 # Quarto Tech Paper
 
+> See [the companion medium article](https://gcl-75380.medium.com/turning-your-notes-into-pdf-technical-memos-or-data-science-reports-ddd150273cc6) for more background.
+
 This repository contains the skeleton for a technical paper built
 from computational Python notebooks, Python modular code, and markdown manuscript.
 The manuscript is rendered in a well-formatted PDF by [Quarto](https://quarto.org/).
@@ -177,4 +179,5 @@ invoke test
 This should generate the skeleton project with cookiecutter,
 render the paper and re-run the first notebook,
 and open the generated files for visual inspection.
+
 
