@@ -31,10 +31,11 @@ The rendered paper is, by default, a 2-column PDF document.
 The formats provided by the [Quarto Tech Memo](https://github.com/gael-close/quarto-tech-memo) 
 are also available, including single-column tech memo, poster, slides.
 
-Here is the [formatted PDF paper](example/paper.pdf)
+Here is the [formatted PDF paper](https://raw.githubusercontent.com/gael-close/quarto-tech-paper/master/example/paper.pdf)
 generated from the template.
 
-![](example/thumbnail.png)
+<img width=800 src="https://raw.githubusercontent.com/gael-close/quarto-tech-paper/master/example/thumbnail.png">
+
 
 ## Features 
 
