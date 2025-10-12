@@ -76,6 +76,7 @@ Create a new project from this skeleton with cookiecutter.
 
 ```bash
 cookiecutter gh:gael-close/quarto-tech-paper
+cd new-repo
 ```
 
 ### Render the paper
@@ -96,7 +97,7 @@ invoke render --preview
 ### Re-run the supplementary computational notebooks
 
 Whenever the data or the code has changed,
-re-run the supplementary notebook(s) in a suitable environment with:
+re-run the supplementary notebook(s) in the project virtual environment with:
 
 ```bash
 invoke notebook 01-notebook.ipynb (--html)
