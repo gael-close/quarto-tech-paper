@@ -63,12 +63,11 @@ for a smooth writing experience (auto-completion, live & sync preview, spell che
 
 ## Installation (one-time only)
 
-
 * Install [Conda](https://www.anaconda.com/download/success) or another equivalent python installation
-* And a few python utilities
+* And a few python utilities (with `pip` or better `pipx` for full isolation)
 
 ```bash
-pip install cookiecutter uv
+pip install cookiecutter uv invoke
 ```
 
 ## Usage
