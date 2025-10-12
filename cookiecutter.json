@@ -1,3 +1,8 @@
 {
-    "DEPRECATED": "Use of the `cookiecutter` command is deprecated. Please use `ccds` in place of `cookiecutter`. To continue using the deprecated template, use `cookiecutter ... -c v1`."
+    "repo_name": "new-repo",
+    "package_name": "{{ cookiecutter.repo_name.lower().replace(' ', '_').replace('-', '_') }}", 
+    "author_name": "Your name (or your organization/company/team)",
+    "description": "A short description of the project.",
+
+    "_copy_without_render": ["**/static.yml", "reports/*"]
 }
