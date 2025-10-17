@@ -1,6 +1,6 @@
 # Quarto Tech Paper
 
-> See [the companion medium article](https://gcl-75380.medium.com/turning-your-notes-into-pdf-technical-memos-or-data-science-reports-ddd150273cc6) for more background.
+> See [the companion medium article](https://medium.com/data-science-collective/turning-your-notes-into-pdf-technical-memos-or-data-science-reports-ddd150273cc6) for more background.
 
 This repository contains the skeleton for a technical paper built
 from computational Python notebooks, Python modular code, and markdown manuscript.
