@@ -3,7 +3,7 @@ from loguru import logger
 from tqdm import tqdm
 import pandas as pd
 import typer
-from {{ cookiecutter.package_name }}.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
+from {{cookiecutter.package_name}}.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
 
 app = typer.Typer()
 

@@ -7,7 +7,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from .myinit import my_sineplot
-from {{ cookiecutter.package_name }}.config import FIGURES_DIR, PROCESSED_DATA_DIR
+from {{cookiecutter.package_name}}.config import FIGURES_DIR, PROCESSED_DATA_DIR
 
 app = typer.Typer()
 
