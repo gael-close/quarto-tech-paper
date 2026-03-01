@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "quarto-tech-paper",
+			"path": "."
+		},
+		{
+			"name": "quarto-tech-memo",
+			"path": "../quarto-tech-memo"
+		}
+	],
+	"settings": {}
+}

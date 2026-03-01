@@ -1,0 +1,9 @@
+pages:
+  stage: deploy
+  script:
+    - mv deliverables public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
