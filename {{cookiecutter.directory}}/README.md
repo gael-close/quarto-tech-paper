@@ -6,11 +6,11 @@
 The project structure is based on: https://github.com/gael-close/quarto-tech-paper.
 Please refer to that repository for installation and usage instructions 
 
-
 ## Usage
 
 ℹ️ First time any `uv ...` command run, it will install 
 the needed dependencies in a virtual env.
+
 
 ### Render the manuscript
 
@@ -49,3 +49,4 @@ Some scripts are available as CLI commands as defined in pyproject.toml. Example
 ```bash
 uv run plots --frequency 1
 ```
+
