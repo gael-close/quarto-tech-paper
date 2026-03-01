@@ -73,7 +73,7 @@ pip install cookiecutter uv invoke quarto-tech-memo
 
 ## Usage
 
-Create a new project from this skeleton with cookiecutter.
+Create and populate a new project from this skeleton with cookiecutter.
 
 ```bash
 cookiecutter gh:gael-close/quarto-tech-paper
@@ -81,6 +81,12 @@ cd new-dir
 ```
 
 Then consult the generated README for details.
+
+
+## Optional files
+
+A few optional recommended git config files are available in the `optional/` folder.
+To enable them, move them in the root folder.
 
 ## Python development recommendations
 
@@ -138,10 +144,17 @@ uv run plots --frequency 0.5
 uv run python -m new_dir.plots --frequency 0.5
 ```
 
-## Optional files
+### Skipping `uv run`
 
-A few optional git config files are available in the `optional/` folder.
-To enable them move them in the root folder.
+Instead of wrapping eveything with `uv run`,
+the virtual environment can be activated once and for all with (in MacOS/Linux):
+
+```bash
+source .venv/bin/activate
+```
+
+The file `optional/.envrc` can be placed in the project root folder 
+to automate this process with [direnv](https://direnv.net/).
 
 ## Development
 
