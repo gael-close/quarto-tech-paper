@@ -7,20 +7,21 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from .myinit import my_sineplot
-from {{cookiecutter.package}}.config import FIGURES_DIR, PROCESSED_DATA_DIR
+from .config import DATA_DIR
 
 app = typer.Typer()
 
 @app.command()
-def plot_joint(df):
-    df2=df.copy()
-    df2["weight"]=df2["weight"]/1000 # convert to tons
-    ax=sns.jointplot(df, x="weight", y="horsepower", height=4) #kind="reg", kwargs={'markersize':5})
+def plot_joint() -> None:
+    """Plot joint distribution of weight vs horsepower from auto-mpg data."""
+    df = pd.read_csv(DATA_DIR / "raw" / "auto-mpg.csv")
+    df2 = df.copy()
+    df2["weight"] = df2["weight"] / 1000  # convert to tons
+    ax = sns.jointplot(df, x="weight", y="horsepower", height=4)
     ax.set_axis_labels("Weight [t]", "Horsepower [hp]")
 
     # Needed to explicitly show the plot when called from CLI
     plt.show()
-    return ax
 
 
 @app.command()
