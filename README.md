@@ -7,9 +7,9 @@ It is intended for technical papers (reports, preprints, ...) in engineering and
 where data analysis and visualization is done in Python.
 
 An example of a generated PDF file is included 
-in the [examples](https://github.com/gael-close/quarto-tech-paper/tree/main/examples) folder.
+in the [examples](examples) folder.
 
-<img width=800 src="https://raw.githubusercontent.com/gael-close/quarto-tech-paper/main/examples/thumbnail.png">
+<img width=800 src="examples/thumbnail.png">
 
 > See [the companion medium article](https://medium.com/data-science-collective/turning-your-notes-into-pdf-technical-memos-or-data-science-reports-ddd150273cc6)
 > for more background on the related Quarto Tech Memo, which serves as the template for the manuscript.
@@ -162,4 +162,5 @@ cp manuscript/manuscript.pdf ../exmaples
 magick -density 150 manuscript/manuscript.pdf -quality 90 -background white -alpha remove ../examples/thumbnail.png;
 
 ```
+
 
