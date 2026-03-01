@@ -41,3 +41,12 @@ The updated plots will be embedded automatically next time the paper is rendered
 The optional `--html` flag generates a standalone
 [HTML version 01-notebook.html](reports/01-notebook.html)
 in case it should be shared as supplementary materials to a broad audience.
+
+### Run scripts from package
+
+Script entry points are defined in `pyproject.toml`.
+Example:
+
+```bash
+uv run plots --frequency 1
+```

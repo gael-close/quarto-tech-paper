@@ -3,7 +3,7 @@ from loguru import logger
 from tqdm import tqdm
 import pandas as pd
 import typer
-from {{cookiecutter.package}}.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
+from {{cookiecutter.package}}.config import DATA_DIR
 
 app = typer.Typer()
 
@@ -11,7 +11,7 @@ app = typer.Typer()
 # In that case use: PACKAGE_DATA_DIR = resources.files(__package__) / "data"
 
 # Data Preparation
-def load_data(file=RAW_DATA_DIR/"auto-mpg.csv", n=None):    
+def load_data(file=DATA_DIR/"raw"/"auto-mpg.csv", n=None):    
     df = pd.read_csv(file)
 
     if n is not None:
@@ -23,8 +23,8 @@ def load_data(file=RAW_DATA_DIR/"auto-mpg.csv", n=None):
 @app.command()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = RAW_DATA_DIR / "dataset.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
+    input_path: Path = DATA_DIR / "raw" / "dataset.csv",
+    output_path: Path = DATA_DIR / "processed" / "dataset.csv",
     # ----------------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----

@@ -133,9 +133,9 @@ uv run pytest
 
 # Run a CLI script by wrapping a function in the package with Typer
 ## If the script is defined in pyproject.toml under [project.scripts]
-uv run plots plot-sine --frequency 0.5
+uv run plots --frequency 0.5
 ## Otherwise, call the function in the module with full path
-uv run python -m new_repo.plots plot-sine --frequency 0.5
+uv run python -m new_dir.plots --frequency 0.5
 ```
 
 ## Optional files
@@ -160,7 +160,6 @@ To update the examples:
 ```bash
 cp manuscript/manuscript.pdf ../exmaples
 magick -density 150 manuscript/manuscript.pdf -quality 90 -background white -alpha remove ../examples/thumbnail.png;
-
 ```
 
 

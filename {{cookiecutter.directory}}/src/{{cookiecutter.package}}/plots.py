@@ -11,10 +11,9 @@ from .config import DATA_DIR
 
 app = typer.Typer()
 
-@app.command()
-def plot_joint() -> None:
+
+def plot_joint(df) -> None:
     """Plot joint distribution of weight vs horsepower from auto-mpg data."""
-    df = pd.read_csv(DATA_DIR / "raw" / "auto-mpg.csv")
     df2 = df.copy()
     df2["weight"] = df2["weight"] / 1000  # convert to tons
     ax = sns.jointplot(df, x="weight", y="horsepower", height=4)
@@ -22,6 +21,7 @@ def plot_joint() -> None:
 
     # Needed to explicitly show the plot when called from CLI
     plt.show()
+    return ax
 
 
 @app.command()
