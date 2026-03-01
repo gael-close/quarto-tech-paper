@@ -42,10 +42,9 @@ The optional `--html` flag generates a standalone
 [HTML version 01-notebook.html](reports/01-notebook.html)
 in case it should be shared as supplementary materials to a broad audience.
 
-### Run scripts from package
+### Run CLI scripts
 
-Script entry points are defined in `pyproject.toml`.
-Example:
+Some scripts are available as CLI commands as defined in pyproject.toml. Example:
 
 ```bash
 uv run plots --frequency 1
