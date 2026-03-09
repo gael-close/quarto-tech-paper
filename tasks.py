@@ -9,15 +9,20 @@ def test(c, gh=False, format='memo2'):
     
     c.run(f'''
         rm -fr new-dir/*  
-        cookiecutter -f {'gh:gael-close' if gh else '$B4'}/quarto-tech-paper --no-input
+        uvx cookiecutter -f {'gh:gael-close' if gh else '$B4'}/quarto-tech-paper --no-input
         cd new-dir
 
-        # Render the notebook(s) and the paper
+        # Render the notebooks and the paper
         inv notebook 01-notebook.ipynb --html
+        inv notebook 02-notebook.py --html
+        
+        # And the paper
         inv render
 
         open manuscript/manuscript.pdf &
         open reports/01-notebook.html &
+        open reports/02-notebook.html
+            
         ''')
     
 @task
