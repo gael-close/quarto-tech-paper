@@ -28,11 +28,9 @@ def test(c, gh=False, format='memo2'):
 @task
 def save(c):
     c.run('''
-          cd ~/Downloads/new-repo/reports;
-          cp *.pdf $B4/quarto-tech-paper/example
-          convert -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png; cp thumbnail*.png $B4/quarto-tech-paper/example
-          cd ../
-          sd new_repo {{cookiecutter.package}} notebooks/01-notebook.ipynb; cp notebooks/01-notebook.ipynb $B4/quarto-tech-paper/"{{cookiecutter.repo_name}}/notebooks"          
+          cp new-dir/manuscript/*.pdf examples/
+          cp new-dir/reports/*.html examples/
+          (cd examples; convert -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png)
           ''')
     
 

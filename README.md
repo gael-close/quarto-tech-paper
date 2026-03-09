@@ -14,6 +14,8 @@ in the [examples](examples) folder.
 > See [the companion medium article](https://medium.com/data-science-collective/turning-your-notes-into-pdf-technical-memos-or-data-science-reports-ddd150273cc6)
 > for more background on the related Quarto Tech Memo, which serves as the template for the manuscript.
 
+
+
 ## Prior work
 
 It is built upon two previous projects:
@@ -36,11 +38,9 @@ The skeleton contains:
 * Simple automation command(s) to render the paper and re-run the supplementary computational notebooks
 (e.g. to update the figures when data or code has changed).
 
-
 ## Features 
 
 * Directories organized similarly to [Cookiecutter Data Science](https://cookiecutter-data-science.drivendata.org/) that incorporate best practices for scientific computing.
-
 * Proper git setup (git LFS, git ignore, ...)
 * Paper manuscript in Quarto markdown with the ability to mix code, illustrations and narrative story in a lean syntax.
 * Under the hood, the final formatting is handled by [Typst](https://typst.app/), 
@@ -62,13 +62,24 @@ for a smooth writing experience (auto-completion, live & sync preview, spell che
 | venv, pip          | uv              |
 | Makefile           | invoke          |
 
+## Supplementary materials
+
+The paper also includes supplementary materials in the form of computational notebooks.
+These are exported as standalone HTML files to supplement the manuscript:
+* [HTML version 01-notebook.html](examples/01-notebook.html)
+* [HTML version 02-notebook.html](examples/02-notebook.html)
+
+The second supplementary notebook is the tutorial [marimo notebook](https://marimo.io/).
+See also [this article](https://towardsdatascience.com/why-im-making-the-switch-to-marimo-notebooks/)
+for the motivation behind this new notebook format.
+
+
 ## Installation (one-time only)
 
-* Install [Conda](https://www.anaconda.com/download/success) or another equivalent python installation
-* And a few python utilities (with `pip` or better `pipx` for full isolation)
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then
 
 ```bash
-pip install cookiecutter uv invoke quarto-tech-memo
+uv tool install quarto-tech-memo
 ```
 
 ## Usage
@@ -76,7 +87,7 @@ pip install cookiecutter uv invoke quarto-tech-memo
 Create and populate a new project from this skeleton with cookiecutter.
 
 ```bash
-cookiecutter gh:gael-close/quarto-tech-paper
+uvx cookiecutter gh:gael-close/quarto-tech-paper
 cd new-dir
 ```
 
@@ -130,6 +141,9 @@ Examples of Python development tasks:
 # Start a jupyter notebook server in the notebooks directory
 uv run jupyter notebook notebooks
 
+# Edit marimo notebooks
+uv run marimo edit notebooks/02-notebook.py
+
 # Optionally, sync the .ipynb and .py versions of the notebooks
 # For easier code review and version control
 uv run jupytext --sync notebooks/*.ipynb
@@ -147,10 +161,11 @@ uv run python -m new_dir.plots --frequency 0.5
 ### Skipping `uv run`
 
 Instead of wrapping eveything with `uv run`,
-the virtual environment can be activated once and for all with (in MacOS/Linux):
+the virtual environment can be activated once and for all with
 
 ```bash
-source .venv/bin/activate
+source .venv/bin/activate # MacOS/Linux
+.venv\Scripts\activate  # Windows
 ```
 
 The file `optional/.envrc` can be placed in the project root folder 
@@ -171,8 +186,7 @@ and open the generated files for visual inspection.
 To update the examples:
 
 ```bash
-cp manuscript/manuscript.pdf ../exmaples
-magick -density 150 manuscript/manuscript.pdf -quality 90 -background white -alpha remove ../examples/thumbnail.png;
+invoke save
 ```
 
 
