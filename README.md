@@ -65,14 +65,17 @@ for a smooth writing experience (auto-completion, live & sync preview, spell che
 ## Supplementary materials
 
 The paper also includes supplementary materials in the form of computational notebooks.
-These are exported as standalone HTML files to supplement the manuscript:
-* [HTML version 01-notebook.html](examples/01-notebook.html)
-* [HTML version 02-notebook.html](examples/02-notebook.html)
+These are exported as standalone HTML files to supplement the manuscript.
+The raw html files are included in the [examples](examples) folder,
+and here links to the rendered versions:
 
-The second supplementary notebook is the tutorial [marimo notebook](https://marimo.io/).
+* [HTML version 01-notebook.html](https://raw.githack.com/gael-close/quarto-tech-paper/main/examples/01-notebook.html)
+* [HTML version 02-notebook.html](https://raw.githack.com/gael-close/quarto-tech-paper/main/examples/02-notebook.html)
+
+The first notebook is a standard Jupyter notebook, and provides the source of the plot in the paper.
+The second one is the [tutorial marimo notebook](https://marimo.io/).
 See also [this article](https://towardsdatascience.com/why-im-making-the-switch-to-marimo-notebooks/)
 for the motivation behind this new notebook format.
-
 
 ## Installation (one-time only)
 
