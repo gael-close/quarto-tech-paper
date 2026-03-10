@@ -82,6 +82,7 @@ for the motivation behind this new notebook format.
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then
 
 ```bash
+uv tool install quarto-cli
 uv tool install quarto-tech-memo
 ```
 
@@ -102,77 +103,9 @@ Then consult the generated README for details.
 A few optional recommended git config files are available in the `optional/` folder.
 To enable them, move them in the root folder.
 
-## Python development recommendations
-
-All code for generating the paper plots including data loading/analysis/visualization
-should be in **modular Python code: functions inside re-usable installable package**.
-While monolithic long scripts are OK, and even desirable, during development and tinkering,
-the code should be refactored once stable for reusability and clarity.
-A pipeline approach is recommended, with separate functions for data loading, analysis and plotting.
-With this approach, the paper notebook is just a thin wrapper calling these functions.
-They can be tested independently, 
-reused in different notebooks or scripts residing in other directories,
-or even invoked from other projects using the package once installed
-(`pip install <path/to/my-project>` or the equivalent [`uv` command](https://docs.astral.sh/uv/pip/packages/)).
-
-```python
-from <package>.dataset import load_data1
-from <package>.analysis import run_analysis1
-from <package>.plot import plot_result1
-from <package>.config import RAW_DATA_DIR
-df=load_data1(RAW_DATA_DIR/"dataset.csv", remove_outliers=True)
-results=run_analysis1(df)
-plot_result1(results)
-```
-where `<package>` is the Python package name for this project (replace with your own).
-
-In the present template, the package is automatically installed (with `uv run`), 
-along with its dependencies, 
-in editable mode so that changes to the functions are immediately available 
-without re-installation or manual path manipulations.
-Support notebooks in the `notebooks` directory can be used
-for interactive development and tinkering.
-Once the package is installed with `uv run`,
-the package functions can be readily called from there.
-The same hold for scripts, test cases, the paper quarto notebook itself,
-or another python project.
 
 
-Examples of Python development tasks:
 
-```bash
-# Start a jupyter notebook server in the notebooks directory
-uv run jupyter notebook notebooks
-
-# Edit marimo notebooks
-uv run marimo edit notebooks/02-notebook.py
-
-# Optionally, sync the .ipynb and .py versions of the notebooks
-# For easier code review and version control
-uv run jupytext --sync notebooks/*.ipynb
-
-# Run unit tests
-uv run pytest
-
-# Run a CLI script by wrapping a function in the package with Typer
-## If the script is defined in pyproject.toml under [project.scripts]
-uv run plots --frequency 0.5
-## Otherwise, call the function in the module with full path
-uv run python -m new_dir.plots --frequency 0.5
-```
-
-### Skipping `uv run`
-
-Instead of wrapping eveything with `uv run`,
-the virtual environment can be activated once and for all with
-
-```bash
-source .venv/bin/activate # MacOS/Linux
-.venv\Scripts\activate  # Windows
-```
-
-The file `optional/.envrc` can be placed in the project root folder 
-to automate this process with [direnv](https://direnv.net/).
 
 ## Development
 
