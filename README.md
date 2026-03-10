@@ -6,8 +6,8 @@ The manuscript is rendered in a well-formatted PDF by [Quarto](https://quarto.or
 It is intended for technical papers (reports, preprints, ...) in engineering and science,
 where data analysis and visualization is done in Python.
 
-An example of a generated PDF file is included 
-in the [examples](examples) folder.
+An example of a [generated PDF](examples/manuscript.pdf) file is included 
+in the examples folder.
 
 <img width=800 src="examples/thumbnail.png">
 
@@ -65,12 +65,9 @@ for a smooth writing experience (auto-completion, live & sync preview, spell che
 ## Supplementary materials
 
 The paper also includes supplementary materials in the form of computational notebooks.
-These are exported as standalone HTML files to supplement the manuscript.
-The raw html files are included in the [examples](examples) folder,
-and here links to the rendered versions:
-
-* [HTML version 01-notebook.html](https://raw.githack.com/gael-close/quarto-tech-paper/main/examples/01-notebook.html)
-* [HTML version 02-notebook.html](https://raw.githack.com/gael-close/quarto-tech-paper/main/examples/02-notebook.html)
+These are exported as standalone HTML files to supplement the manuscript in the `example` folder.
+Typically the whole package, the manuscript and the supplementary HTML files, would be published online.
+As an example, they are published on the repo Gitlab pages: https://gael-close.github.io/quarto-tech-paper. 
 
 The first notebook is a standard Jupyter notebook, and provides the source of the plot in the paper.
 The second one is the [tutorial marimo notebook](https://marimo.io/).
@@ -124,5 +121,6 @@ To update the examples:
 ```bash
 invoke save
 ```
+
 
 
