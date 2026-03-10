@@ -31,7 +31,7 @@ def save(c):
           cp new-dir/manuscript/*.pdf examples/
           cp new-dir/reports/*.html examples/
           (cd examples; convert -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png)
-          (cd examples; tree -H '.' -I rest > index.html)
+          (cd examples; tree -H '' -I rest > index.html)
           ''')
     
 
