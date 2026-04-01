@@ -36,6 +36,7 @@ dependencies = [
     "summarytools>=0.3.0",
     "typer>=0.16.1",
     "watermark>=2.5.0",
+    "ipykernel>=7.2.0",
 ]
 
 [tool.jupytext]
