@@ -21,8 +21,8 @@ def notebook(c, notebook, html=False):
 
     if html:
         src=Path("notebooks")/notebook
-        Path("reports").mkdir(parents=True, exist_ok=True)
-        dst=Path("reports")/(src.stem+".html")
+        Path("supplementary").mkdir(parents=True, exist_ok=True)
+        dst=Path("supplementary")/(src.stem+".html")
 
         if notebook.endswith(".ipynb"):
             c.run(f"quarto render {src} --self-contained --toc; mv {src.with_suffix('.html')} {dst}")

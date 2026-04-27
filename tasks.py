@@ -20,8 +20,8 @@ def test(c, gh=False, format='memo2'):
         inv render
 
         open manuscript/manuscript.pdf &
-        open reports/01-notebook.html &
-        open reports/02-notebook.html
+        open supplementary/01-notebook.html &
+        open supplementary/02-notebook.html
             
         ''')
     
@@ -29,8 +29,8 @@ def test(c, gh=False, format='memo2'):
 def save(c):
     c.run('''
           cp new-dir/manuscript/*.pdf examples/
-          cp new-dir/reports/*.html examples/
-          (cd examples; convert -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png)
+          cp -r new-dir/supplementary examples/
+          (cd examples; magick -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png)
           (cd examples; tree -H '' -I rest > index.html)
           ''')
     
