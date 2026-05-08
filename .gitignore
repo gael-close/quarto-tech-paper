@@ -12,6 +12,8 @@
 !.gitlab-ci.yml
 !.python-version
 !.github
+!.envrc
+
 
 # Python
 __pycache__/
