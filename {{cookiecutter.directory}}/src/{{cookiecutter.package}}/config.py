@@ -12,7 +12,7 @@ PROJ_ROOT = here()
 logger.info(f"PROJ_ROOT path is: {PROJ_ROOT}")
 
 DATA_DIR = PROJ_ROOT / "data"
-REPORTS_DIR = PROJ_ROOT / "reports"
+SUPP_DIR = PROJ_ROOT / "supplementary"
 
 # If tqdm is installed, configure loguru with tqdm.write
 # https://github.com/Delgan/loguru/issues/135
