@@ -43,5 +43,13 @@ dependencies = [
 formats = "ipynb,py:percent"
 notebook_metadata_filter="-all"
 
+[tool.pytest.ini_options]
+addopts = "--disable-warnings"
+testpaths = ["tests/"]
+python_files = ["test_*.py", "test-*.py"]
+norecursedirs = [".git", ".venv", "src"]
+log_cli = true
+log_cli_level = "INFO"
+
 [project.scripts]
 plots = "{{cookiecutter.package}}.plots:app"
