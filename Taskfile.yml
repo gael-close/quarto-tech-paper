@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+vars:
+  # New variable with default
+  USE_GITHUB: '{{.Github | default "false"}}'
+
+tasks:
+  setup:
+    desc: Setup the project
+    cmds:
+      - rm -fr new-dir
+      - |
+        if [ "{{.USE_GITHUB}}" = "true" ]; then
+          uvx cookiecutter gh:gael-close/quarto-tech-paper --no-input
+        else
+          uvx cookiecutter . --no-input
+        fi
+      - defer: rm -rf .venv # Optional: clean up if the sync fails halfway
+      - cd new-dir && uv sync --extra dev
+  basic-test:
+    desc: Basic test
+    cmds:
+      - uv run pytest -s
+    dir: new-dir
+ 
+  render:
+    desc: Render the paper
+    cmds:
+    - |
+      task notebook NOTEBOOK=01-notebook.ipynb HTML=true
+      task notebook NOTEBOOK=02-notebook.py HTML=true
+      task render
+      if [ ! -f "supplementary/01-notebook.html" ] || [ ! -f "supplementary/02-notebook.html" ]; then
+        echo "Error: HTML files were not created in new-dir/supplementary!"
+        exit 1
+      fi
+    dir: new-dir
+
+  view:
+    desc: View the paper
+    cmds: 
+      - open manuscript/manuscript.pdf
+      - open supplementary/01-notebook.html
+      - open supplementary/02-notebook.html
+    dir: new-dir
+  
+  save-examples:
+    desc: Save the examples
+    cmds:
+      - |
+        cp ../new-dir/manuscript/*.pdf .
+        cp -r ../new-dir/supplementary .
+        magick -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png
+        tree -H '' -I rest > index.html
+    dir: examples
+  test-all:
+    desc: Run all tests from scratch
+    cmds:
+    - task: setup
+    - task: basic-test
+    - task: render
+    - task: view
+  

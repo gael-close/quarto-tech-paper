@@ -1,26 +1,27 @@
 """
-Test cases
 
 
 # Run selected test (need pytest.ini in root!)
 # -s for print statements
 - pytest --co # collect only
-- pytest -s -k "<keywords>" 
+- pytest -s -k "keywords>" 
+- pytest -pdb # debug
 - pytest -s tests # run all tests
-- pytest -s -pdb # debug
 
+
+
+# Examples of code
 
 """
 # %% Init
 import pytest
 from typer.testing import CliRunner
 
-# Import project config and modules
-from {{cookiecutter.package}}.config import *
+# All modules in development
 from {{cookiecutter.package}}.myinit import *
 from {{cookiecutter.package}}.dataset import *
 from {{cookiecutter.package}}.plots import *
-from {{cookiecutter.package}}.scripts import app
+
 
 
 # %% Test the device tables

@@ -38,5 +38,13 @@ def plot_sine(frequency: float = 1.0):
     plt.grid(True)
     plt.show()
 
+
+@app.command()
+def hello(name: str, upper: bool = False):
+    """Say hello."""
+    formatted_name = name.upper() if upper else name
+    print(f"Hello {formatted_name}")
+
+
 if __name__ == "__main__":
     app()

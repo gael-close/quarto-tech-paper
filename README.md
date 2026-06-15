@@ -47,7 +47,7 @@ The skeleton contains:
 a modern typesetting engine that is much easier and faster than Latex---this is [fully integrated in Quarto](https://quarto.org/docs/output-formats/typst.html).
 * The Python dependencies are managed with [uv](https://docs.astral.sh/uv/) another modern and fast tool, which install dependencies on the fly in isolated reproducible environment
 with one command.
-* A `tasks.py` to invoke common operations with [invoke](https://docs.pyinvoke.org/en/stable/index.html)
+* A `Taskfile.py` to invoke common task with [taskfile.dev](https://taskfile.dev/)
 
 Generally speaking, the project is designed to be as lean and simple as possible
 while following best practices for scientific computing and reproducible research.
@@ -60,7 +60,7 @@ for a smooth writing experience (auto-completion, live & sync preview, spell che
 | Latex syntax       | Markdown syntax |
 | PdfLatex rendering | Typst           |
 | venv, pip          | uv              |
-| Makefile           | invoke          |
+| Makefile           | Taskfile        |
 
 ## Supplementary materials
 
@@ -74,26 +74,28 @@ The second one is the [tutorial marimo notebook](https://marimo.io/).
 See also [this article](https://towardsdatascience.com/why-im-making-the-switch-to-marimo-notebooks/)
 for the motivation behind this new notebook format.
 
-## Installation (one-time only)
+## Getting started
 
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) 
+and [taskfile.dev](https://taskfile.dev/docs/installation) 
+as described in their documentation. 
+
+Then run the following to install the project dependencies, 
+render the paper, and open the generated files 
+PDF of the paper and HTML for the supplementary materials
+for visual inspection.
+
 
 ```bash
-uv tool install quarto-cli
-uv tool install quarto-tech-memo
-```
-
-## Usage
-
-Create and populate a new project from this skeleton with cookiecutter.
-
-```bash
+# Get the template
 uvx cookiecutter gh:gael-close/quarto-tech-paper
 cd new-dir
+
+# Run the tasks (see `tasks list`)
+task install
+task render
+...
 ```
-
-Then consult the generated README for details.
-
 
 ## Optional files
 
@@ -101,26 +103,17 @@ A few optional recommended git config files are available in the `optional/` fol
 To enable them, move them in the root folder.
 
 
-
-
-
 ## Development
 
-To run a complete test suite to check that everything is working as expected:
+To run a complete test suite to check that everything is working as expected.
 
 ```bash
-invoke test
+task test-all
+
+# Once all tests pass, save the examples
+task save-examples
 ```
 
-This should generate the skeleton project with cookiecutter,
-render the paper and re-run the first notebook,
-and open the generated files for visual inspection.
-
-To update the examples:
-
-```bash
-invoke save
-```
 
 
 

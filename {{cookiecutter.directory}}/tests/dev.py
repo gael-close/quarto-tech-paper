@@ -11,10 +11,8 @@ Can be run from VScode
 
 Can be run as standalone exec script: tests/dev.py
 '''
-#%% Generic init code
-from {{cookiecutter.package}}.config import *
-from {{cookiecutter.package}}.myinit import *
 
+from {{cookiecutter.package}}.config import *
 
 # Autoreload in Notebook only
 try:
@@ -27,9 +25,11 @@ try:
 except:
     pass
 
-
 #%% Development area
 logger.info("## WIP code##")
-my_sineplot()
-from {{cookiecutter.package}}.dataset import *
+
+from {{cookiecutter.package}}.plots import *
+from {{cookiecutter.package}}.data import *
+# Optional checks and watermark
+my_sineplot();
 df = load_data()

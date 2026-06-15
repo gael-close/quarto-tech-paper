@@ -11,7 +11,16 @@ def propagate_logs_to_pytest(caplog):
     class PropagateHandler(logging.Handler):
         def emit(self, record):
             logging.getLogger(record.name).handle(record)
-
     sink_id = logger.add(PropagateHandler(), format="{message}")
     yield
     logger.remove(sink_id)
+
+# Exampple: simple function-scoped fixture
+@pytest.fixture
+def sample_user_data():
+    """Provides a dummy dictionary representing user data."""
+    return {
+        "username": "test_user",
+        "email": "test@example.com",
+        "is_admin": False
+    }

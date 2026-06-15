@@ -4,9 +4,9 @@ This guide provides instructions for agentic coding systems working in this repo
 
 ## Project Overview
 
-This is a Python research/data science project built with `uv` for dependency management and `invoke` for task automation. The project generates technical papers/memos with supplementary computational notebooks and modular Python packages.
+This is a Python research/data science project built with `uv` for dependency management and `task` (Taskfile) for task automation. The project generates technical papers/memos with supplementary computational notebooks and modular Python packages.
 
-**Key Technologies:** Python 3.10+, Quarto, Jupyter/Marimo notebooks, Invoke, Pytest
+**Key Technologies:** Python 3.10+, Quarto, Jupyter/Marimo notebooks, Taskfile, Pytest
 
 ## Build, Lint & Test Commands
 
@@ -50,21 +50,16 @@ uv run pytest --co
 
 ```bash
 # Render manuscript to PDF (memo2 format default)
-uv run invoke render
+task render
 
 # Render with specific format
-uv run invoke render --format memo2
+task render TO=memo2
 
-# Render with live preview in browser
-uv run invoke render --preview
-
-# Execute supplementary notebooks
-uv run invoke notebook 01-notebook.ipynb
-uv run invoke notebook 02-notebook.py
-
-# Export notebook to standalone HTML
-uv run invoke notebook 01-notebook.ipynb --html
-uv run invoke notebook 02-notebook.py --html
+# Execute and optionally convert supplementary notebooks to HTML
+task notebook NOTEBOOK=01-notebook.ipynb
+task notebook NOTEBOOK=01-notebook.ipynb HTML=true
+task notebook NOTEBOOK=02-notebook.py
+task notebook NOTEBOOK=02-notebook.py HTML=true
 ```
 
 ### Running CLI Scripts
@@ -153,7 +148,7 @@ uv run python -m new_dir.plots --frequency 0.5
 
 - **pyproject.toml**: Project metadata, dependencies, build config, CLI scripts
 - **pytest.ini**: Pytest configuration (ignores `*dev.py`, runs from `tests/`)
-- **tasks.py**: Invoke task definitions (render, notebook, etc.)
+- **Taskfile.yml**: Taskfile task definitions (render, notebook, etc.)
 - **.python-version**: Specifies Python version (3.10+)
 
 ## Project Architecture

@@ -1,0 +1,63 @@
+# {% raw %}
+version: '3'
+
+tasks:
+  install:
+    desc: "Install the project dependencies"
+    cmds:
+      - uv tool install quarto-cli
+      - uv tool install quarto-tech-memo
+
+  render:
+    desc: "Rendering the paper"
+    vars:
+      TO: '{{.TO | default "memo2"}}'
+    cmds:
+      - cd manuscript && quarto-tech-memo manuscript.md --to {{.TO}}
+
+  notebook:
+    desc: "Execute and optionally convert a supplementary notebook to HTML"
+    vars:
+      NOTEBOOK: '{{.NOTEBOOK}}'
+      HTML: '{{.HTML | default "false"}}'
+    cmds:
+      - |
+        if [ -z "{{.NOTEBOOK}}" ]; then
+          echo "Error: NOTEBOOK variable is required. Example: task notebook NOTEBOOK=01-notebook.ipynb [HTML=true]"
+          exit 1
+        fi
+        
+        NB="{{.NOTEBOOK}}"
+        HTML="{{.HTML}}"
+        STEM="${NB%.*}"
+        EXT="${NB##*.}"
+        
+        if [ "$HTML" = "true" ]; then
+          echo "Executing and converting notebook $NB to HTML"
+        else
+          echo "Executing notebook $NB"
+        fi
+        
+        if [ "$EXT" = "ipynb" ]; then
+          uv run jupyter nbconvert --to notebook --inplace --execute "notebooks/$NB"
+        elif [ "$EXT" = "py" ] && [ "$HTML" != "true" ]; then
+          uv run python "notebooks/$NB"
+        fi
+        
+        if [ "$HTML" = "true" ]; then
+          mkdir -p supplementary
+          if [ "$EXT" = "ipynb" ]; then
+            quarto render "notebooks/$NB" --self-contained --toc
+            mv "notebooks/${STEM}.html" "supplementary/${STEM}.html"
+          elif [ "$EXT" = "py" ]; then
+            uv run marimo export html "notebooks/$NB" -o "supplementary/${STEM}.html"
+          fi
+        fi
+
+  notebook-marimo:
+    desc: "Start the marimo notebook editor"
+    vars:
+      NOTEBOOK: '{{.NOTEBOOK | default "02-notebook.py"}}'
+    cmds:
+      - uv run marimo edit notebooks/{{.NOTEBOOK}}
+# {% endraw %}

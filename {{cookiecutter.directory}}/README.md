@@ -1,48 +1,31 @@
 
 # {{cookiecutter.directory}}
 
-## Installation
+## Introduction
 
 The project structure is based on: https://github.com/gael-close/quarto-tech-paper.
 
-Install the quarto and the quarto-tech-memo tool 
-with [uv](https://docs.astral.sh/uv/getting-started/installation/),
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) 
+and [taskfile.dev](https://taskfile.dev/docs/installation) 
+as described in their documentation.
+This is for Python environment management and task automation, respectively.
 
-```bash { name=install }
-uv tool install quarto-cli
-uv tool install quarto-tech-memo
+The command `task list` shows the available tasks,
+and `task <taskname> --dry` shows the commands to be executed.
+
+## Installation
+
+```bash
+task install
 ```
 
 ## Usage
 
-ℹ️ First time any `uv ...` command run, it will install 
-the needed dependencies in a virtual env.
-
-> The `uv run` prefix ensures that the command is executed in the project virtual environment.
-> Alternatively, you can create and activate the virtual environment once for all,
-> and run the commands *without* the `uv run` prefix.
-> This can be automated whenever you enter the directory with [direnv](https://direnv.net/)
-
-```bash
-uv sync
-.\venv\Scripts\activate #Windows
-source .venv/bin/activate #(Linux/Mac)
-```
-
 ### Render the manuscript
-
 This command generates the [rendered manuscript.pdf](manuscript/manuscript.pdf) (in 2-column memo format):
 
 ```bash
-uv run invoke render (--format memo2)
-```
-
-You can edit the [source manuscript.md](manuscript/manuscript.md)
-directly in your favorite editor,
-and preview the compiled version updated automatically in your browser with:
-
-```bash
-uv run invoke render --preview
+task render (TO=memo2)
 ```
 
 ### Re-run the supplementary computational notebooks
@@ -51,8 +34,13 @@ Whenever the data or the code has changed,
 re-run the supplementary notebook(s) in the project virtual environment with:
 
 ```bash {name=notebook}
-uv run invoke notebook 01-notebook.ipynb --html
-uv run invoke notebook 02-notebook.py --html
+# Just execute
+task notebook NOTEBOOK=01-notebook.ipynb
+task notebook NOTEBOOK=02-notebook.py
+
+# Execute and convert to HTML
+task notebook NOTEBOOK=01-notebook.ipynb HTML=true
+task notebook NOTEBOOK=02-notebook.py HTML=true
 ```
 
 Note that the second notebook is the tutorial [marimo notebook](https://marimo.io/).
@@ -62,11 +50,8 @@ Install the [vscode extension](https://marketplace.visualstudio.com/items?itemNa
 to run it in VSCode.
 
 The updated plots will be embedded automatically next time the paper is rendered.
-The optional `--html` flag generates standalone HTML versions of the notebooks 
-in the `reports` directory. 
-These files can be shared as supplementary materials:
-* [HTML version 01-notebook.html](reports/01-notebook.html)
-* [HTML version 02-notebook.html](reports/02-notebook.html)
+Providing the `HTML=true` named argument generates standalone HTML versions of the notebooks 
+in the `supplementary` directory (shared as supplementary materials).
 
 
 ### Run CLI scripts
@@ -78,7 +63,6 @@ uv run plots --frequency 1
 # Alternative: direct invokation
 # uv run python -m new_dir.plots --frequency 0.5
 ```
-
 
 ## Python development recommendations
 
@@ -114,9 +98,8 @@ Examples of Python development tasks:
 
 ```bash
 # Edit notebooks
-uv run jupyter notebook notebooks
-uv run marimo edit notebooks
-
+uv run jupyter notebook 01-notebook.py
+uv run marimo edit 02-notebook.py
 # Run unit tests
 uv run pytest
 ```

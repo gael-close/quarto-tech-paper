@@ -1,11 +1,15 @@
 from pathlib import Path
-from dotenv import load_dotenv
 from loguru import logger
 from pyprojroot import here
+from tqdm import tqdm
+import sys
+import yaml
+import socket
+from pydantic_settings import BaseSettings
 
-
-# Load environment variables from .env file if it exists
-load_dotenv()
+# Configure loguru with tqdm.write
+logger.remove()
+logger.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
 
 # Paths
 PROJ_ROOT = here()
@@ -14,12 +18,21 @@ logger.info(f"PROJ_ROOT path is: {PROJ_ROOT}")
 DATA_DIR = PROJ_ROOT / "data"
 SUPP_DIR = PROJ_ROOT / "supplementary"
 
-# If tqdm is installed, configure loguru with tqdm.write
-# https://github.com/Delgan/loguru/issues/135
-try:
-    from tqdm import tqdm
+# Venv
+logger.info(f"Python executable: {sys.executable}")
 
-    logger.remove(0)
-    logger.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
-except ModuleNotFoundError:
-    pass
+# Settings
+class Settings(BaseSettings):
+    ESP32S3_USB_VID: int
+    ESP32S3_USB_PID: int
+    BAUD_RATE: int
+    
+    class Config:
+        env_file = '.env'
+
+# Load settings from YAML file
+settings_path = PROJ_ROOT / 'settings.yaml'
+with open(settings_path) as f:
+    settings_dict = yaml.safe_load(f)
+
+settings = Settings.model_validate(settings_dict)
