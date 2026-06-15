@@ -59,8 +59,3 @@ log_cli_level = "INFO"
 
 [project.scripts]
 plots = "{{cookiecutter.package}}.plots:app"
-
-[tool.pytest.ini_options]
-addopts = "--disable-warnings --ignore-glob *dev.py"
-testpaths = "tests/" 
-python_files="*.py"
