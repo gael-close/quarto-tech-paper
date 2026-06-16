@@ -12,7 +12,7 @@ tasks:
       - uvx cookiecutter -f gh:gael-close/quarto-tech-memo --no-input directory='manuscript' filename='manuscript'
       - uv sync --extra dev
       - uv run pytest -s
-      - task consistent-title
+      - pixi run consistent-title
     dir: paper
   
   
@@ -20,10 +20,10 @@ tasks:
     desc: Render all supplementary materials and the paper
     cmds:
     - |
-      task notebook NB=01-notebook.ipynb HTML=true
-      task notebook NB=02-notebook.py HTML=true
-      task render
-      task dist
+      pixi run notebook -- 01-notebook.ipynb
+      pixi run notebook-marimo -- 02-notebook.py
+      pixi run render
+      pixi run dist
       echo ""
       echo "Running consistency checks..."
     dir: paper
@@ -52,7 +52,7 @@ tasks:
     desc: Run all tests from scratch
     cmds:
     - task: setup
-    - task: basic-test
-    - task: render
+    - pixi run basic-test
+    - pixi run render
     - task: view
   

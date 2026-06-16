@@ -20,47 +20,26 @@ tasks:
 
 
   notebook:
-    desc: "Execute and optionally convert a supplementary notebook to HTML"
+    desc: "Execute and convert Jupyter notebook to HTML (usage: task notebook -- 01-notebook.ipynb)"
     cmds:
       - |
-        NB="{{.NB}}"
-        HTML='{{.HTML | default "false"}}'
-        
-        if [ -z "$NB" ]; then
-          echo "Error: NB variable is required. Example: task notebook NB=01-notebook.ipynb HTML=true"
-          exit 1
-        fi
-        
+        NB="{{.CLI_ARGS}}"
         STEM="${NB%.*}"
-        EXT="${NB##*.}"
-        
-        if [ "$HTML" = "true" ]; then
-          echo "Executing and converting notebook $NB to HTML"
-        else
-          echo "Executing notebook $NB"
-        fi
-        
-        if [ "$EXT" = "ipynb" ]; then
-          uv run jupyter nbconvert --to notebook --inplace --execute "notebooks/$NB"
-        elif [ "$EXT" = "py" ] && [ "$HTML" != "true" ]; then
-          uv run python "notebooks/$NB"
-        fi
-        
-        
-        if [ "$HTML" = "true" ]; then
-          mkdir -p dist/supplementary
-          if [ "$EXT" = "ipynb" ]; then
-            quarto render "notebooks/$NB" --self-contained --toc
-            mv "notebooks/${STEM}.html" "dist/supplementary/${STEM}.html"
-          elif [ "$EXT" = "py" ]; then
-            uv run marimo export html "notebooks/$NB" -o "dist/supplementary/${STEM}.html"
-          fi
-        fi
+        echo "Executing and converting notebook $NB to HTML"
+        uv run jupyter nbconvert --to notebook --inplace --execute "notebooks/$NB"
+        mkdir -p dist/supplementary
+        quarto render "notebooks/$NB" --self-contained --toc
+        mv "notebooks/${STEM}.html" "dist/supplementary/${STEM}.html"
 
   notebook-marimo:
-    desc: "Start the marimo notebook editor"
+    desc: "Execute and convert marimo notebook to HTML (usage: task notebook-marimo -- 02-notebook.py)"
     cmds:
-      - uv run marimo edit notebooks/{{.NB}}
+      - |
+        NB="{{.CLI_ARGS}}"
+        STEM="${NB%.*}"
+        echo "Executing and converting marimo notebook $NB to HTML"
+        mkdir -p dist/supplementary
+        uv run marimo export html "notebooks/$NB" -o "dist/supplementary/${STEM}.html"
 
   make-toc:
     desc: "Generate contents.html table of contents"
@@ -80,7 +59,7 @@ tasks:
   pub-gdrive:
     desc: "Publish the paper to Google Drive"
     cmds:
-      - gdrive files update $GOOGLE_FID "$SHORT_TITLE.pdf"
+      - uv run python ../scripts/upload-to-gdrive.py "$SHORT_TITLE.pdf" $GOOGLE_FID
     dir: dist
 
   consistent-title:

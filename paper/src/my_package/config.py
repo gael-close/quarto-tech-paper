@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     BAUD_RATE: int
     
     class Config:
-        env_file = '.env'
+        env_file = PROJ_ROOT / '.env'
 
 settings = Settings()
 

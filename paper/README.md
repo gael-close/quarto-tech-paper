@@ -6,151 +6,134 @@
 
 The project structure is based on: https://github.com/gael-close/quarto-tech-paper.
 
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/) 
-and [taskfile.dev](https://taskfile.dev/docs/installation) 
-as described in their documentation.
-This is for Python environment management and task automation, respectively.
+**Prerequisites:**
+- Install [pixi](https://pixi.sh/latest/#installation) for cross-platform task automation and environment management
 
-The command `task list` shows the available tasks,
-and `task <taskname> --dry` shows the commands to be executed.
-The tasks are defined in the [Taskfile.yml](Taskfile.yml) file.
+## Quick Start
 
-## Installation
-
+**Download the template:**
 ```bash
-task install
+# Option 1: Download just the paper folder (recommended)
+git clone --depth 1 --filter=blob:none --sparse \
+  https://github.com/gael-close/quarto-tech-paper.git
+cd quarto-tech-paper
+git sparse-checkout set paper
+mv paper ../my-project
+cd ../my-project
+
+# Option 2: Clone entire repository
+git clone https://github.com/gael-close/quarto-tech-paper.git
+cd quarto-tech-paper/paper
 ```
 
-By default, generic names are used
+**Install dependencies:**
+```bash
+# Install ALL dependencies (conda packages + Python packages + local package)
+pixi install
+```
 
-* The Python package is "my_package",
-* The paper filename is "manuscript.pdf". It can be adjusted in `.env`.
+That's it! Pixi installs everything: uv, Quarto, Python packages, and the local `my_package` in editable mode.
 
+**Note:** The `quarto-tech-memo` extension will be installed automatically on first render if not already present.
 
+**Configuration** (`.env` file):
+- `SHORT_TITLE` - Paper filename (default: "manuscript.pdf")
+- `GOOGLE_FID` - Google Drive file ID for publishing
+
+Run `pixi list`
+ 
 ## Usage
 
-### Render the manuscript
-This command generates the [rendered manuscript.pdf](manuscript/manuscript.pdf) (in 2-column memo format):
-
+**Discover available tasks:**
 ```bash
-task render
+pixi task list        # List all available tasks
+pixi task info <task> # Show details for a specific task
 ```
 
-### Re-run the supplementary computational notebooks
-
-Whenever the data or the code has changed,
-re-run the supplementary notebook(s) in the project virtual environment with:
-
-```bash {name=notebook}
-# Just execute
-task notebook NB=01-notebook.ipynb
-task notebook NB=02-notebook.py
-
-# Execute and convert to HTML
-task notebook NB=01-notebook.ipynb HTML=true
-task notebook NB=02-notebook.py HTML=true
-```
-
-Note that the second notebook is the tutorial [marimo notebook](https://marimo.io/).
-See also [this article](https://towardsdatascience.com/why-im-making-the-switch-to-marimo-notebooks/)
-for the motivation behind this new notebook format.
-Install the [vscode extension](https://marketplace.visualstudio.com/items?itemName=marimo-team.vscode-marimo)
-to run it in VSCode.
-
-The updated plots will be embedded automatically next time the paper is rendered.
-Providing the `HTML=true` named argument generates standalone HTML versions of the notebooks 
-in the `supplementary` directory (shared as supplementary materials).
-
-
-### Run CLI scripts
-
-Some scripts are available as CLI commands as defined in pyproject.toml. Example:
-
+**Common workflows:**
 ```bash
-uv run plots --frequency 1
-# Alternative: direct invokation
-# uv run python -m new_dir.plots --frequency 0.5
+# Render manuscript to PDF
+pixi run render
+
+# Execute and convert notebooks to HTML
+NB=01-notebook.ipynb pixi run notebook 
+NB=02-notebook.py pixi run notebook-marimo
+# on Windows: env:NB="01-notebook.ipynb"; pixi run notebook
+
+# Build distribution website
+pixi run dist
+
+# Publish to Google Drive (see Publishing section)
+pixi run pub-gdrive
 ```
 
-## Python development recommendations
+**Run CLI scripts:**
+```bash
+pixi run plots --frequency 1
+# or: pixi run python -m my_package.plots --frequency 0.5
+```
 
-All code for generating the paper plots including data loading/analysis/visualization
-should be in **modular Python code: functions inside re-usable installable package**.
-While monolithic long scripts are OK, and even desirable, during development and tinkering,
-the code should be refactored once stable for reusability and clarity.
-A pipeline approach is recommended, with separate functions for data loading, analysis and plotting.
-With this approach, the paper notebook is just a thin wrapper calling these functions.
-They can be tested independently, 
-reused in different notebooks or scripts residing in other directories,
-or even invoked from other projects using the package once installed.
+**Python development:**
+```bash
+pixi run pytest -s        # Run tests
+pixi run jupyter lab      # Open Jupyter
+```
+
+## Python Development
+
+Organize code into **modular, reusable packages** for maintainability:
 
 ```python
-from my_package.dataset import load_data1
-from my_package.analysis import run_analysis1
-from my_package.plot import plot_result1
+from my_package.dataset import load_data
+from my_package.analysis import run_analysis
+from my_package.plots import plot_results
 from my_package.config import RAW_DATA_DIR
-df=load_data1(RAW_DATA_DIR/"dataset.csv", remove_outliers=True)
-results=run_analysis1(df)
-plot_result1(results)
+
+df = load_data(RAW_DATA_DIR / "dataset.csv")
+results = run_analysis(df)
+plot_results(results)
 ```
 
-where `my_package` is the Python package name for this project. 
-You can replace with your own.
+The package (`my_package`) is installed in editable mode, so changes take effect immediately.
 
-The package is automatically installed (with `uv run`), 
-along with its dependencies, 
-in editable mode so that changes to the functions are immediately available 
-without re-installation or manual path manipulations.
+**Note:** All Python commands should be prefixed with `pixi run` to use the environment managed by pixi.
 
+**Advanced:** If you modify `pyproject.toml` dependencies directly, run:
+```bash
+pixi run uv sync --extra dev
+```
 
-Examples of Python development tasks:
+## Publishing
+
+### Google Drive
+
+Publish the manuscript PDF to Google Drive using PyDrive2:
+
+1. **First-time setup:**
+   - Create Google Drive API credentials ([instructions](https://console.cloud.google.com/))
+   - Place `client_secrets.json` in `~/.config/pixi_gdrive/`
+   - Run `pixi run pub-gdrive` - browser auth will open once
+
+2. **Set file ID in `.env`:**
+   ```
+   GOOGLE_FID=your_google_drive_file_id
+   ```
+
+3. **Publish:**
+   ```bash
+   pixi run pub-gdrive
+   ```
+
+See [scripts/README.md](scripts/README.md) for detailed setup instructions.
+
+### Website Distribution
+
+Build a landing page with embedded PDF and supplementary materials:
 
 ```bash
-# Edit notebooks
-uv run jupyter notebook notebooks/01-notebook.py
-uv run marimo edit notebooks/02-notebook.py
-# Run unit tests
-uv run pytest -s
+pixi run dist
 ```
 
-## To publish
+The output in `dist/` can be deployed to GitHub/GitLab Pages. Example workflow files are in `optional/`.
 
-### PDF to Gdrive
-
-You can publish the manuscript PDF to Gdrive
-using a Gdrive client like [gdrive](https://github.com/glotlabs/gdrive).
-Adjust the Google file ID  `.env` file.
-You first need to upload the PDF in the desired Gdrive folder,
-to create a file ID.
-
-
-```shell
-task pub-gdrive
-```
-
-
-### Distribute as a website
-
-It is also possible to publish the materials to GitLab/GitHub pages as a mini website,
-called a project landing page.
-This can includes the paper PDF and the HTML for the supplementary materials.
-Collect the material in the dist/ folder, either via symlink or plain copy.
-possibly via symlinks.
-
-Either use GitLab or GitHub actions to publish automatically on every commit. 
-See in the optional folder for the action file to be used in this case.
-
-Create a proper website page embedding the PDF and the supplementary materials.
-Enrich it with a proper abstract, link to videos, and other highlights.
-A Quarto example is provided in [site/index.qmd](site/index.qmd).
-It can be build into a proper website ready for distribution with:
-
-```shell
-task dist
-```
-
-Other (non quarto) templates are available at: 
-<https://github.com/eliahuhorwitz/Academic-project-page-template>
-
-Instead of a full website, the project can be shared as single HTML file with just the table of contents
-with the [contents file](dist/contents.html), which could be rename to `index.html`.
+Customize the landing page in [site/index.qmd](site/index.qmd).
