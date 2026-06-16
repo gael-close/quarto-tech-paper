@@ -103,3 +103,15 @@ uv run marimo edit 02-notebook.py
 # Run unit tests
 uv run pytest
 ```
+
+## To publish
+
+The materials to be distributed should be collected in the dist/ folder,
+possibly via symlinks.
+
+Use gitlab or github CI actions to publish it (see in the optional folder).
+Regenerate the index if needed with:
+
+```bash
+cd dist; tree -H '.' -T "My Project" -o index.html
+```

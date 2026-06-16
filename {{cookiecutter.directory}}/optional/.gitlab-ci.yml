@@ -1,7 +1,7 @@
 pages:
   stage: deploy
   script:
-    - mv deliverables public
+    - cp -LR dist public
   artifacts:
     paths:
       - public
