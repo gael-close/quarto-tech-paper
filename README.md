@@ -124,13 +124,9 @@ To run a complete test suite to check that everything is working as expected.
 
 ```bash
 
-task setup basic-test render-all
-# Check 
-open new-dir/dist/contents.html
-
-# Once all tests pass, save the example
-task save-example
-open dist/contents.html # should be the same as above
+task setup render-all save-example
+# Check manually
+open dist/contents.html
 ```
 
 

@@ -13,11 +13,11 @@ tasks:
 
   render:
     desc: "Rendering the paper"
-    vars:
-      TO: 'memo2'
     cmds:
-      - cd manuscript && quarto-tech-memo manuscript.md --to {{.TO}}
-      - mv manuscript/manuscript.pdf dist/"$MANUSCRIPT.pdf"
+      - quarto-tech-memo manuscript.md --to memo2
+      - mv manuscript.pdf ../dist/"$SHORT_TITLE.pdf"
+    dir: manuscript
+
 
   notebook:
     desc: "Execute and optionally convert a supplementary notebook to HTML"
@@ -73,14 +73,21 @@ tasks:
     cmds:
       - quarto render site
       - mv -f site/_build/index.html dist/index.html
-      - sd "manuscript.pdf" "$MANUSCRIPT.pdf" dist/index.html 
+      - sd "manuscript.pdf" "$SHORT_TITLE.pdf" dist/index.html 
       - rm -fr site/_build
       - task: make-toc
 
   pub-gdrive:
     desc: "Publish the paper to Google Drive"
     cmds:
-      - gdrive files update $GOOGLE_FID "$MANUSCRIPT.pdf"
+      - gdrive files update $GOOGLE_FID "$SHORT_TITLE.pdf"
     dir: dist
+
+  consistent-title:
+    desc: Replace template titles with SHORT_TITLE environment variable
+    cmds:
+      - |-
+        sd '^title:.*' "title: $SHORT_TITLE" manuscript/manuscript.md
+        sd '^title:.*' "title: $SHORT_TITLE" site/index.qmd
 
 

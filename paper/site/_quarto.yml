@@ -3,7 +3,7 @@ project:
   output-dir: _build
   
 website:
-  title: "{{cookiecutter.name}}"
+  title: "Project Landing Page"
   navbar:
     left: []
   search: false

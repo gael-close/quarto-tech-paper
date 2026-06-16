@@ -1,11 +1,11 @@
 ---
-title: {{cookiecutter.name}}
-subtitle: "Project Landing Page"
+title: Quarto Tech Paper Example
+subtitle: My Subtitle
 author: 
-  - name: "John Smith"
+  - name: John Smith
 page-layout: full
 metadata:
-  doi: "10.1039/dummyurl"
+  doi: 10.1039/dummyurl
 categories:
   - Template
   - Technical Paper
@@ -23,7 +23,7 @@ One could also embed video, images, and other media.
 ```{=html}
 <div style="max-width: 1000px;">
   <iframe 
-    src="manuscript.pdf"
+    src="{{< meta title >}}.pdf"
     style="width: 100%; height: 1000px; border: 1px solid #e5e7eb; border-radius: 0.5rem;"
     allowfullscreen>
   </iframe>

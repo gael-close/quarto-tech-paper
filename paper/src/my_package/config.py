@@ -22,7 +22,7 @@ logger.info(f"Python executable: {sys.executable}")
 # Settings
 class Settings(BaseSettings):
     GOOGLE_FID: str
-    MANUSCRIPT: str
+    SHORT_TITLE: str
     ESP32S3_USB_VID: str
     ESP32S3_USB_PID: str
     BAUD_RATE: int
@@ -31,3 +31,5 @@ class Settings(BaseSettings):
         env_file = '.env'
 
 settings = Settings()
+
+

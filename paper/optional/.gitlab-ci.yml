@@ -1,0 +1,7 @@
+pages:
+  stage: deploy
+  artifacts:
+    paths:
+      - dist
+  only:
+    - main

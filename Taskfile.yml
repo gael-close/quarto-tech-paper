@@ -1,8 +1,7 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
 
-vars:
-   MANUSCRIPT: "Quarto Tech Paper Example"
+
 
 tasks:
   setup:
@@ -10,22 +9,12 @@ tasks:
         GITHUB: '{{.GITHUB | default "false"}}'
     desc: Setup the project
     cmds:
-      - rm -fr new-dir/*
-      - |
-        if [ "{{.GITHUB}}" = "true" ]; then
-          uvx cookiecutter -f gh:gael-close/quarto-tech-paper --no-input
-        else
-          uvx cookiecutter -f . --no-input 
-        fi
-      - defer: rm -rf venv # Optional: clean up if the sync fails halfway
-      - cd new-dir && uv sync --extra dev
-      - cd new-dir && sd "manuscript" "{{.MANUSCRIPT}}.pdf" .env
-  basic-test:
-    desc: Basic test
-    cmds:
+      - uvx cookiecutter -f gh:gael-close/quarto-tech-memo --no-input directory='manuscript' filename='manuscript'
+      - uv sync --extra dev
       - uv run pytest -s
-    dir: new-dir
- 
+      - task consistent-title
+    dir: paper
+  
   
   render-all:
     desc: Render all supplementary materials and the paper
@@ -33,30 +22,31 @@ tasks:
     - |
       task notebook NB=01-notebook.ipynb HTML=true
       task notebook NB=02-notebook.py HTML=true
-      if [ ! -f "dist/supplementary/01-notebook.html" ] || [ ! -f "dist/supplementary/02-notebook.html" ]; then
-        echo "Error: HTML files were not created in new-dir/supplementary!"
-        exit 1
-      fi
       task render
       task dist
-    dir: new-dir
+      echo ""
+      echo "Running consistency checks..."
+    dir: paper
+
 
   view:
     desc: View all generated files (paper PDF and supplementary HTML)
     cmds: 
-      - open dist/"{{.MANUSCRIPT}}.pdf"
+      - open dist/*.pdf
       - open dist/supplementary/01-notebook.html
       - open dist/supplementary/02-notebook.html
-    dir: new-dir
+    dir: paper
   
   save-example:
     desc: Distribute the landing page as an example (with Quarto site sidebar)
     cmds:
       - |
-        rm -rf dist && mkdir -p dist && cp -R new-dir/dist/* dist/
+        rm -rf dist && mkdir dist && cp -R paper/dist/* dist/
         cd dist
         magick -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png 2>/dev/null && echo "✓ Thumbnail: thumbnail.png" || echo "⚠ Thumbnail generation skipped"
-        PROJECT_DIR="$(cd ../new-dir && pwd)" SCREENSHOT_WIDTH=1280 SCREENSHOT_HEIGHT=900 SCREENSHOT_WAIT=3000 chrome-screenshot "$(pwd)/index.html" index.png && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
+        PROJECT_DIR="$(cd ../new-dir && pwd)" SCREENSHOT_WIDTH=1280 SCREENSHOT_HEIGHT=900 SCREENSHOT_WAIT=3000 chrome-screenshot.sh "$(pwd)/index.html" index.png && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
+      - cmd: ./check.sh
+       
   
   test-all:
     desc: Run all tests from scratch

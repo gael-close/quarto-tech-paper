@@ -10,28 +10,14 @@
 !.gitkeep
 !.gitattributes
 !.gitlab-ci.yml
-!.python-version
-!.github
-!.envrc
-
 
 # Python
 __pycache__/
 *.pyc
 *egg-info/
-.venv/
-__marimo__/
 
-# Ignore generated directories and other repo build, CVS, gdrive ..
-_plots/
+# Ignore generated contents
 *_files/
 _build/
 tmp/
-
-# Ignore generated files of the template paper
-paper/manuscript/
-paper/dist/**/*.pdf
-paper/dist/**/*.html
-
-
-/.luarc.json
+docs/*.pdf

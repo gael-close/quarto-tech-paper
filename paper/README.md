@@ -1,5 +1,5 @@
 
-# {{cookiecutter.name}}
+# A Quarto Tech Paper Example
 
 
 ## Introduction
