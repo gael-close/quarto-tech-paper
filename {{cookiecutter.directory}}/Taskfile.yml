@@ -62,6 +62,12 @@ tasks:
     cmds:
       - uv run marimo edit notebooks/{{.NOTEBOOK}}
 
+  make-toc:
+    desc: "Generate contents.html table of contents"
+    cmds:
+      - tree -H '' -T "My Project" -l -L 5 -o contents.html && sed -i '' 's|<a href="./supplementary/">supplementary</a>|supplementary|g' contents.html
+    dir: dist
+
   dist:
     desc: "Make the project landing page for distribution"
     cmds:
@@ -69,7 +75,7 @@ tasks:
       - ln -fs ../site/_build/index.html .
       - ln -fs ../manuscript/manuscript.pdf .
       - ln -fs ../supplementary .
-      - tree -H '' -T "My Project" -o contents.html
+      - task: make-toc
     dir: dist
 
   pub-gdrive:

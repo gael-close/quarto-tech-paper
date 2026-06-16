@@ -148,5 +148,5 @@ Instead of a full website, the project can be shared as single HTML file with ju
 with the [contents file](dist/contents.html). Regenerate it needed with:
 
 ```bash
-cd dist; tree -H '' -T "My Project" -o contents.html
+cd dist; tree -H '' -T "My Project" --noreport -o contents.html
 ```
