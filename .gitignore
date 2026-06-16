@@ -28,6 +28,10 @@ _plots/
 _build/
 tmp/
 
+# Quarto
+.quarto/
+**/*.quarto_ipynb
+
 # Ignore generated files of the template paper
 paper/manuscript/
 paper/dist/**/*.pdf

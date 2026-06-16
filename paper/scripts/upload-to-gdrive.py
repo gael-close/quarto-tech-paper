@@ -1,57 +1,98 @@
-#!/usr/bin/env python3
-"""Upload file to Google Drive using PyDrive2.
+#!/usr/bin/env uv run
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#     "pydantic-settings>=2.0.0",
+#     "pyprojroot>=0.3.0",
+#     "typer",
+# ]
+# ///
 
-Usage:
-    python upload_to_gdrive.py <local_file_path> <target_file_id>
-"""
-import os
+import subprocess
 import sys
-from pathlib import Path
-from platformdirs import user_config_dir
-from pydrive2.auth import GoogleAuth
-from pydrive2.drive import GoogleDrive
+import os
+from pyprojroot import here
+import typer
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    # Pydantic automatically looks for an environment variable named RCLONE_DRIVE_TOKEN
+    RCLONE_DRIVE_TOKEN: str 
+    GOOGLE_FID: str | None = None
+    GOOGLE_ID: str | None = None
+
+    # Tell Pydantic to read from a local .env file if the OS variable isn't set
+    model_config = SettingsConfigDict(env_file=here(".env"), extra="ignore")
+
+    @property
+    def google_id(self) -> str:
+        return self.GOOGLE_ID or self.GOOGLE_FID
+
+settings = Settings()
 
 
-def main():
-    # 1. Define a hidden, cross-platform path for your app
-    # This creates a hidden folder named "pixi_gdrive" in the system config directory
-    app_name = "pixi_gdrive"
-    config_dir = Path(user_config_dir(app_name))
-    config_dir.mkdir(parents=True, exist_ok=True)  # Ensure the folder exists
+def update_or_upload_standalone(local_file_path, folder_id):
+    """
+    Uploads/updates a file inside Google Drive using a direct Folder ID (FID)
+    and an embedded OAuth token. Zero pre-configuration required.
+    """
+    # Validation checks
+    if not os.path.exists(local_file_path):
+        print(f"❌ Error: Local file '{local_file_path}' not found.")
+        return False
+        
+    file_name = os.path.basename(local_file_path)
+    
+    # 2. Inject configuration fields explicitly on-the-fly.
+    # Passing the exact token means rclone bypasses all configuration prompts.
+    on_the_fly_remote = f':drive,root_folder_id="{folder_id}",token=\'{settings.RCLONE_DRIVE_TOKEN}\':'
+    
+    print(f"🔄 Headless sync started for '{file_name}' to Folder ID: {folder_id}...")
 
-    # 2. Put the credentials file inside that hidden directory
-    credentials_path = config_dir / "my_credentials.txt"
+    # 3. Assemble command targeting the precise destination name
+    command = [
+        "rclone", "copyto",
+        local_file_path,
+        f"{on_the_fly_remote}{file_name}",
+        "--drive-acknowledge-abuse",
+        "-v"
+    ]
+    
+    try:
+        # Run rclone headlessly and capture real-time output
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+                
+        rc = process.poll()
+        if rc == 0:
+            print(f"✅ Success! Version updated seamlessly without pre-configuration.")
+            return True
+        else:
+            print(f"❌ Rclone processing failed with exit code {rc}.")
+            return False
+            
+    except FileNotFoundError:
+        print("❌ Error: 'rclone' binary must be installed on this machine's system PATH.")
+        return False
 
-    # 3. Pass the absolute string path to PyDrive2
-    gauth = GoogleAuth()
-    gauth.LoadCredentialsFile(str(credentials_path))
+app = typer.Typer()
 
-    if gauth.credentials is None:
-        # Triggers the browser auth on the very first run
-        gauth.LocalWebserverAuth()
-    elif gauth.access_token_expired:
-        gauth.Refresh()
-    else:
-        gauth.Authorize()
-
-    gauth.SaveCredentialsFile(str(credentials_path))
-    drive = GoogleDrive(gauth)
-
-    # 4. Accept arguments from Pixi task
-    if len(sys.argv) != 3:
-        print("Usage: python upload_to_gdrive.py <local_file_path> <target_file_id>")
-        sys.exit(1)
-
-    local_file_path = sys.argv[1]
-    target_file_id = sys.argv[2]
-
-    # 5. Overwrite the file using its ID
-    file_obj = drive.CreateFile({"id": target_file_id})
-    file_obj.SetContentFile(local_file_path)
-    file_obj.Upload()
-
-    print(f"Successfully updated File ID: {target_file_id}")
-
+@app.command()
+def main(
+    name: str = typer.Option(..., "--name", help="Path to local file to upload"),
+    id: str = typer.Option(settings.google_id, "--id", help="Google Drive Folder ID")
+):
+    if not id:
+        print("❌ Error: Google Drive Folder ID must be provided via --id option or env variables (GOOGLE_ID/GOOGLE_FID).")
+        raise typer.Exit(code=1)
+    update_or_upload_standalone(local_file_path=name, folder_id=id)
 
 if __name__ == "__main__":
-    main()
+    app()

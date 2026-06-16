@@ -41,7 +41,14 @@ That's it! Pixi installs everything: uv, Quarto, Python packages, and the local 
 - `GOOGLE_FID` - Google Drive file ID for publishing
 
 Run `pixi list`
- 
+
+To verify
+
+```bash
+pixi run check-import
+pixi run pytest -s
+```
+
 ## Usage
 
 **Discover available tasks:**
@@ -63,21 +70,18 @@ NB=02-notebook.py pixi run notebook-marimo
 # Build distribution website
 pixi run dist
 
-# Publish to Google Drive (see Publishing section)
-pixi run pub-gdrive
 ```
 
-**Run CLI scripts:**
-```bash
-pixi run plots --frequency 1
-# or: pixi run python -m my_package.plots --frequency 0.5
-```
 
 **Python development:**
+
+Start a shell with `pixi shell` and run Python commands in the environment.
+
 ```bash
-pixi run pytest -s        # Run tests
-pixi run jupyter lab      # Open Jupyter
+plots plot-sine --freqency 1
+jupyter lab      # Open Jupyter
 ```
+
 
 ## Python Development
 
@@ -96,18 +100,11 @@ plot_results(results)
 
 The package (`my_package`) is installed in editable mode, so changes take effect immediately.
 
-**Note:** All Python commands should be prefixed with `pixi run` to use the environment managed by pixi.
-
-**Advanced:** If you modify `pyproject.toml` dependencies directly, run:
-```bash
-pixi run uv sync --extra dev
-```
 
 ## Publishing
 
 ### Google Drive
 
-Publish the manuscript PDF to Google Drive using PyDrive2:
 
 1. **First-time setup:**
    - Create Google Drive API credentials ([instructions](https://console.cloud.google.com/))

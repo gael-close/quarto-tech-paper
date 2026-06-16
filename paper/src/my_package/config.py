@@ -21,15 +21,17 @@ logger.info(f"Python executable: {sys.executable}")
 
 # Settings
 class Settings(BaseSettings):
-    GOOGLE_FID: str
+    GOOGLE_ID: str
     SHORT_TITLE: str
     ESP32S3_USB_VID: str
     ESP32S3_USB_PID: str
     BAUD_RATE: int
     
-    class Config:
-        env_file = PROJ_ROOT / '.env'
-
+    # Modern Pydantic V2 Configuration
+    model_config = SettingsConfigDict(
+        env_file=PROJ_ROOT / '.env',
+        extra="ignore"  # <-- Silently discards any other keys found in your .env
+    )
 settings = Settings()
 
 

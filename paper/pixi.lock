@@ -2924,7 +2924,34 @@ packages:
 - pypi: ./
   name: my-package
   version: 0.1.0
-  sha256: 183e260a3b33e5a713a12eac3a3a5bd60faa9444d4ec70e89488334a74d0f183
+  sha256: 1c4348523b37c39243651a51d68f1f7dcac9e6c603e2f9de67e4582dfc740f6b
+  requires_dist:
+  - forallpeople>=2.7.0
+  - holoviews>=1.19.1
+  - hvplot>=0.11.0
+  - icecream>=2.1.3
+  - loguru>=0.7.3
+  - matplotlib>=3.9.2
+  - numpy>=2.1.2
+  - pandas>=2.2.3
+  - platformdirs>=4.0.0
+  - pydantic-settings>=2.0.0
+  - pydrive2>=1.20.0
+  - pyprojroot>=0.3.0
+  - pytest>=8.4.2
+  - python-box>=7.2.0
+  - seaborn>=0.13.2
+  - sigfig>=1.3.3
+  - sitepath>=0.4.0
+  - summarytools>=0.3.0
+  - typer>=0.16.1
+  - watermark>=2.5.0
+  - jupyterlab>=4.2.5
+  - jupytext>=1.16.4
+  - marimo>=0.20.4
+  - notebook>=7.2.2
+  - ipykernel>=7.2.0
+  - quarto-tech-memo
   requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/48/ca/36339329c4604adbcc99c899b7eb1ce1a555c499b6a6860757dc9bfed36d/narwhals-2.22.1-py3-none-any.whl
   name: narwhals

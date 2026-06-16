@@ -3,6 +3,8 @@
 ## We have git for backups!
 ##---------------------------------------------------
 
+.env
+
 # hidden and backup files
 .*
 *~*
@@ -13,7 +15,7 @@
 !.python-version
 !.github
 !.envrc
-
+!.env.example
 
 # Python
 __pycache__/
