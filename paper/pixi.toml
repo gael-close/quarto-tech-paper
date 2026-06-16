@@ -1,0 +1,122 @@
+[workspace]
+name = "quarto-tech-paper"
+version = "0.1.0"
+description = "Technical paper/memo generation with Quarto"
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64"]
+
+# Load environment variables from .env file (like Taskfile's dotenv)
+# Note: Set environment variables before running tasks, e.g.:
+#   export SHORT_TITLE="My Paper Title"
+#   export GOOGLE_FID="1abc..."
+# Or create a .env file with these variables
+
+[dependencies]
+# Python interpreter required for PyPI dependencies
+python = ">=3.10"
+
+# External CLI tools required by Taskfile.yml
+uv = "*"              # Fast Python package installer and project manager
+quarto = "*"          # Scientific and technical publishing system
+sd = "*"              # Modern sed replacement for text processing
+gh = "*"              # GitHub CLI for repository operations
+
+[target.unix.dependencies]
+tree = "*"            # Directory visualization for make-toc task (Unix only)
+
+[pypi-dependencies]
+# Python package dependencies (matches pyproject.toml)
+forallpeople = ">=2.7.0"
+holoviews = ">=1.19.1"
+hvplot = ">=0.11.0"
+icecream = ">=2.1.3"
+loguru = ">=0.7.3"
+matplotlib = ">=3.9.2"
+numpy = ">=2.1.2"
+pandas = ">=2.2.3"
+platformdirs = ">=4.0.0"
+pydantic-settings = ">=2.0.0"
+pydrive2 = ">=1.20.0"
+pyprojroot = ">=0.3.0"
+pytest = ">=8.4.2"
+python-box = ">=7.2.0"
+seaborn = ">=0.13.2"
+sigfig = ">=1.3.3"
+sitepath = ">=0.4.0"
+summarytools = ">=0.3.0"
+typer = ">=0.16.1"
+watermark = ">=2.5.0"
+
+# Development dependencies
+jupyterlab = ">=4.2.5"
+jupytext = ">=1.16.4"
+marimo = ">=0.20.4"
+notebook = ">=7.2.2"
+ipykernel = ">=7.2.0"
+
+# Quarto extension (PyPI package, not in conda-forge)
+quarto-tech-memo = "*"
+
+my_package = { path = ".", editable = true }
+
+
+[tasks]
+
+check-import = "python -c 'import my_package; print(\"SUCCESS!\"); from my_package.config import *'"
+# ============================================================================
+# Paper Rendering Tasks
+# ============================================================================
+
+render = { cmd = """
+quarto-tech-memo manuscript.md --to memo2 && mv manuscript.pdf ../dist/"$SHORT_TITLE.pdf"
+""", cwd = "manuscript" }
+
+# ============================================================================
+# Notebook Tasks
+# ============================================================================
+
+# This single line is 100% compatible with Pixi's cross-platform shell
+notebook = "jupyter nbconvert --to notebook --inplace --execute notebooks/$NB --execute && quarto render notebooks/$NB --to html --output-dir dist/supplementary --embed-resources --toc"
+
+notebook-marimo = "marimo export html notebooks/$NB -o dist/supplementary/"
+
+# ============================================================================
+# Distribution Tasks
+# ============================================================================
+
+make-toc = { cmd = """
+if command -v tree >/dev/null 2>&1; then
+  tree -H '' -T "My Project" -l -L 5 -o contents.html && sed -i '' 's|<a href="./supplementary/">supplementary</a>|supplementary|g; s|href="./../supplementary/|href="./|g' contents.html
+else
+  echo "Warning: tree command not available (Windows). Skipping contents.html generation."
+fi
+""", cwd = "dist" }
+
+dist = { cmd = """
+quarto render site
+mv -f site/_build/index.html dist/index.html
+sd "manuscript.pdf" "$SHORT_TITLE.pdf" dist/index.html
+rm -fr site/_build
+cd dist && if command -v tree >/dev/null 2>&1; then
+  tree -H '' -T "My Project" -l -L 5 -o contents.html && sed -i '' 's|<a href="./supplementary/">supplementary</a>|supplementary|g; s|href="./../supplementary/|href="./|g' contents.html
+else
+  echo "Warning: tree command not available (Windows). Skipping contents.html generation."
+fi
+""" }
+
+# ============================================================================
+# Publishing Tasks
+# ============================================================================
+
+pub-gdrive = { cmd = """
+uv run python ../scripts/upload-to-gdrive.py "$SHORT_TITLE.pdf" $GOOGLE_FID
+""", cwd = "dist" }
+
+# ============================================================================
+# Utility Tasks
+# ============================================================================
+
+consistent-title = """
+sd '^title:.*' "title: $SHORT_TITLE" manuscript/manuscript.md
+sd '^title:.*' "title: $SHORT_TITLE" site/index.qmd
+"""
