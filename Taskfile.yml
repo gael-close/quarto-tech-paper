@@ -54,9 +54,12 @@ tasks:
         # Create dist folder from the rendered site
         rm -fr dist
         cp -Lr new-dir/dist dist
-      
-        # Generate thumbnail
-        (cd dist && magick -density 150 manuscript.pdf -quality 90 -background white -alpha remove thumbnail.png)
+        
+        # Generate thumbnail from PDF
+        cd dist && magick -density 150 manuscript.pdf -quality 90 -background white -alpha remove thumbnail.png
+        
+        # Generate screenshot of index.html
+        chrome.sh --headless --screenshot=index.png --window-size=1280,720 "file://$(realpath index.html)" 2>/dev/null && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
   
   test-all:
     desc: Run all tests from scratch

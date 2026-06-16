@@ -80,7 +80,8 @@ The skeleton also provides a project landing page example
 aggregating the project materials in a single page to be published online.
 Here is the included example: <https://gael-close.github.io/quarto-tech-paper>.
 
-<iframe src="https://gael-close.github.io/quarto-tech-paper/index.html" width="100%" height="1000px" border="1px solid #e5e7eb" border-radius="0.5rem" allowfullscreen></iframe>
+
+<img width=800 src="dist/index.png">
 
 It is also rendered by Quarto for consistency.
 Other (non quarto) templates are available at: 
