@@ -1,65 +1,47 @@
 ---
-title: "A Gradiometric Magnetic Force Sensor Immune to Stray Magnetic Fields for Robotic Hands and Grippers"
-subtitle: "Project Landing Page -- JUST A PLACEHOLDER"
+title: {{cookiecutter.name}}
+subtitle: "Project Landing Page"
 author: 
-  - name: "Théo Le Signor"
-  - name: "Nicolas Dupré"
-  - name: "Gaël F. Close"
+  - name: "John Smith"
 page-layout: full
 metadata:
-  published: "April 2022"
-  doi: "10.1109/LRA.2022.3146507"
-  journal_name: "IEEE Robotics and Automation Letters"
-  volume: 7
-  number: 2
-  pages: "3070–3077"
-  year: 2022
+  doi: "10.1039/dummyurl"
 categories:
-  - Robotics
-  - Tactile Sensing
-  - Magnetic Sensors
+  - Template
+  - Technical Paper
 ---
 
-::: {.callout-warning}
-THIS IS A PLACEHOLDER FOR A PROJECT LANDING PAGE to illustrate the capabilities of 
-the [quarto-tech-paper extension](https://github.com/gael-close/quarto-tech-paper).
-:::
 
-## Abstract
+# Abstract
 
-To enable precise manipulation of fragile objects, robots need the sense of touch. Localized sensing of the 3D force vector with a few mN of resolution is desired. Magnetic force sensors, consisting of a magnet embedded in an elastomer and a 3D magnetometer, were demonstrated as desirable candidates. These prior-art sensors measure the local 3D magnetic field at a single sensing pixel. Hence, they cannot distinguish between the signal and stray magnetic fields.
+This landing page a placeholder. It embeds the full PDF of the paper,
+the link to supplementary notebooks and link to source code.
+One could also embed video, images, and other media.
 
-This letter introduces a design immune to stray magnetic fields. The sensor uses multiple magnetic pixels, and operates on the gradient of the magnetic field. The pixels and conditioning electronics are fully integrated on chip. The 3D force calculation is based on a polynomial model fitted to a calibration data set. The impact of a 2-mT magnetic stray field on the force output is limited to 0.3% of the full scale—about two orders magnitude improvement over the prior art.
-
-## Full Paper
+# Full Paper
 
 ```{=html}
 <div style="max-width: 1000px;">
   <iframe 
-    src="manuscript-placeholder.pdf"
+    src="manuscript.pdf"
     style="width: 100%; height: 1000px; border: 1px solid #e5e7eb; border-radius: 0.5rem;"
     allowfullscreen>
   </iframe>
 </div>
 ```
 
-## Links
-
-- [IEEE Xplore (DOI)](https://doi.org/10.1109/LRA.2022.3146507)
-- [Melexis (Authors)](https://www.melexis.com)
-
-## Citation
+# Citation
 
 ```bibtex
-@article{LeSignor2022,
-  title={A gradiometric magnetic force sensor immune to stray magnetic fields for robotic hands and grippers},
-  author={Le Signor, Théo and Dupré, Nicolas and Close, Gael F},
-  journal={IEEE Robotics and Automation Letters},
-  volume={7},
-  number={2},
-  pages={3070--3077},
-  year={2022},
-  publisher={IEEE},
-  doi={10.1109/LRA.2022.3146507}
+@article{doe2026dummy,
+  title   = {A Dummy Article for Demonstration Purposes},
+  author  = {Doe, John and Smith, Jane},
+  journal = {Journal of LaTeX Examples},
+  volume  = {42},
+  number  = {3},
+  pages   = {101--115},
+  year    = {2026},
+  doi     = {10.1039/dummyurl},
+  url     = {https://example.com}
 }
 ```

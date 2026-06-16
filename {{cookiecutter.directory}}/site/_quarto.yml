@@ -1,12 +1,9 @@
 project:
   type: website
   output-dir: _build
-  resources:
-    - ../supplementary
-
-
+  
 website:
-  title: "Gradiometric Magnetic Force Sensor (Placeholder)"
+  title: "{{cookiecutter.name}}"
   navbar:
     left: []
   search: false

@@ -1,6 +1,6 @@
 {
     "directory": "new-dir",
-    "package": "{{cookiecutter.directory.lower().replace(' ', '_').replace('-', '_')}}", 
-    "_copy_without_render": ["**/static.yml", "Taskfile.yml", "site/*"]
+    "name": "A Quarto Tech Paper Example",
+    "_copy_without_render": ["**/static.yml", "Taskfile.yml"]
 }
 

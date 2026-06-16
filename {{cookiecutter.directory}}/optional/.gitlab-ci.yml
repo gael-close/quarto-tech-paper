@@ -1,9 +1,7 @@
 pages:
   stage: deploy
-  script:
-    - cp -LR dist public
   artifacts:
     paths:
-      - public
+      - dist
   only:
     - main

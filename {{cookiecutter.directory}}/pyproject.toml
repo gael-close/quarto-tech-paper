@@ -3,7 +3,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = {{cookiecutter.package|tojson}}
+name = "my_package"
 version = "0.0.1"
 description = "TBD"
 authors = [
@@ -58,4 +58,4 @@ log_cli = true
 log_cli_level = "INFO"
 
 [project.scripts]
-plots = "{{cookiecutter.package}}.plots:app"
+plots = "my_package.plots:app"

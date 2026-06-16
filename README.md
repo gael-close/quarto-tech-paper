@@ -124,7 +124,7 @@ To run a complete test suite to check that everything is working as expected.
 
 ```bash
 
-task setup render-all
+task setup basic-test render-all
 # Check 
 open new-dir/dist/contents.html
 

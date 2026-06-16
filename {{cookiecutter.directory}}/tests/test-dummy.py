@@ -18,9 +18,9 @@ import pytest
 from typer.testing import CliRunner
 
 # All modules in development
-from {{cookiecutter.package}}.myinit import *
-from {{cookiecutter.package}}.dataset import *
-from {{cookiecutter.package}}.plots import *
+from my_package.myinit import *
+from my_package.dataset import *
+from my_package.plots import *
 
 
 

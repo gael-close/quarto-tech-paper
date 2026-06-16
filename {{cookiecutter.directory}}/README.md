@@ -1,5 +1,6 @@
 
-# {{cookiecutter.directory}}
+# {{cookiecutter.name}}
+
 
 ## Introduction
 
@@ -20,6 +21,12 @@ The tasks are defined in the [Taskfile.yml](Taskfile.yml) file.
 task install
 ```
 
+By default, generic names are used
+
+* The Python package is "my_package",
+* The paper filename is "manuscript.pdf". It can be adjusted in `.env`.
+
+
 ## Usage
 
 ### Render the manuscript
@@ -36,12 +43,12 @@ re-run the supplementary notebook(s) in the project virtual environment with:
 
 ```bash {name=notebook}
 # Just execute
-task notebook NOTEBOOK=01-notebook.ipynb
-task notebook NOTEBOOK=02-notebook.py
+task notebook NB=01-notebook.ipynb
+task notebook NB=02-notebook.py
 
 # Execute and convert to HTML
-task notebook NOTEBOOK=01-notebook.ipynb HTML=true
-task notebook NOTEBOOK=02-notebook.py HTML=true
+task notebook NB=01-notebook.ipynb HTML=true
+task notebook NB=02-notebook.py HTML=true
 ```
 
 Note that the second notebook is the tutorial [marimo notebook](https://marimo.io/).

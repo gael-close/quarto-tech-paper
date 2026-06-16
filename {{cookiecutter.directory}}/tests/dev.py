@@ -12,7 +12,7 @@ Can be run from VScode
 Can be run as standalone exec script: tests/dev.py
 '''
 
-from {{cookiecutter.package}}.config import *
+from my_package.config import *
 
 # Autoreload in Notebook only
 try:
@@ -28,8 +28,8 @@ except:
 #%% Development area
 logger.info("## WIP code##")
 
-from {{cookiecutter.package}}.plots import *
-from {{cookiecutter.package}}.data import *
+from my_package.plots import *
+from my_package.data import *
 # Optional checks and watermark
 my_sineplot();
 df = load_data()

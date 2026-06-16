@@ -2,21 +2,24 @@
 version: '3'
 
 vars:
-  GITHUB: 'false'
+   MANUSCRIPT: "Quarto Tech Paper Example"
 
 tasks:
   setup:
+    vars:
+        GITHUB: '{{.GITHUB | default "false"}}'
     desc: Setup the project
     cmds:
-      - rm -fr new-dir
+      - rm -fr new-dir/*
       - |
         if [ "{{.GITHUB}}" = "true" ]; then
-          uvx cookiecutter gh:gael-close/quarto-tech-paper --no-input
+          uvx cookiecutter -f gh:gael-close/quarto-tech-paper --no-input
         else
-          uvx cookiecutter . --no-input
+          uvx cookiecutter -f . --no-input 
         fi
       - defer: rm -rf venv # Optional: clean up if the sync fails halfway
       - cd new-dir && uv sync --extra dev
+      - cd new-dir && sd "manuscript" "{{.MANUSCRIPT}}.pdf" .env
   basic-test:
     desc: Basic test
     cmds:
@@ -28,38 +31,32 @@ tasks:
     desc: Render all supplementary materials and the paper
     cmds:
     - |
-      task notebook NOTEBOOK=01-notebook.ipynb HTML=true
-      task notebook NOTEBOOK=02-notebook.py HTML=true
-      task render
-      if [ ! -f "supplementary/01-notebook.html" ] || [ ! -f "supplementary/02-notebook.html" ]; then
+      task notebook NB=01-notebook.ipynb HTML=true
+      task notebook NB=02-notebook.py HTML=true
+      if [ ! -f "dist/supplementary/01-notebook.html" ] || [ ! -f "dist/supplementary/02-notebook.html" ]; then
         echo "Error: HTML files were not created in new-dir/supplementary!"
         exit 1
       fi
-
+      task render
       task dist
     dir: new-dir
 
   view:
     desc: View all generated files (paper PDF and supplementary HTML)
     cmds: 
-      - open manuscript/manuscript.pdf
-      - open supplementary/01-notebook.html
-      - open supplementary/02-notebook.html
+      - open dist/"{{.MANUSCRIPT}}.pdf"
+      - open dist/supplementary/01-notebook.html
+      - open dist/supplementary/02-notebook.html
     dir: new-dir
   
   save-example:
     desc: Distribute the landing page as an example (with Quarto site sidebar)
     cmds:
       - |
-        # Create dist folder from the rendered site
-        rm -fr dist
-        cp -Lr new-dir/dist dist
-        
-        # Generate thumbnail from PDF
-        cd dist && magick -density 150 manuscript.pdf -quality 90 -background white -alpha remove thumbnail.png
-        
-        # Generate screenshot of index.html
-        chrome.sh --headless --screenshot=index.png --window-size=1280,720 "file://$(realpath index.html)" 2>/dev/null && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
+        rm -rf dist && mkdir -p dist && cp -R new-dir/dist/* dist/
+        cd dist
+        magick -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png 2>/dev/null && echo "✓ Thumbnail: thumbnail.png" || echo "⚠ Thumbnail generation skipped"
+        PROJECT_DIR="$(cd ../new-dir && pwd)" SCREENSHOT_WIDTH=1280 SCREENSHOT_HEIGHT=900 SCREENSHOT_WAIT=3000 chrome-screenshot "$(pwd)/index.html" index.png && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
   
   test-all:
     desc: Run all tests from scratch

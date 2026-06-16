@@ -3,8 +3,8 @@
 
 # %% Test fixtures: live reload, environment, arguments
 # Generic init code
-from {{cookiecutter.package}}.myinit import *
-from {{cookiecutter.package}}.dataset import *
+from my_package.myinit import *
+from my_package.dataset import *
 
 # Load the data and everything else when run as a script
 # Invoke from notebook with 

@@ -1,10 +1,8 @@
 version: '3'
 
-vars:
-  FID: '<long ID string for the google file>'
-  PUBNAME: 'Manuscript Published Filename'
-  NOTEBOOK: ''
-  HTML: 'false'
+# Load the .env file globally
+dotenv: ['.env']
+
 
 tasks:
   install:
@@ -19,16 +17,17 @@ tasks:
       TO: 'memo2'
     cmds:
       - cd manuscript && quarto-tech-memo manuscript.md --to {{.TO}}
+      - mv manuscript/manuscript.pdf dist/"$MANUSCRIPT.pdf"
 
   notebook:
     desc: "Execute and optionally convert a supplementary notebook to HTML"
     cmds:
       - |
-        NB="{{.NOTEBOOK}}"
-        HTML="{{.HTML}}"
+        NB="{{.NB}}"
+        HTML='{{.HTML | default "false"}}'
         
         if [ -z "$NB" ]; then
-          echo "Error: NOTEBOOK variable is required. Example: task notebook NOTEBOOK=01-notebook.ipynb HTML=true"
+          echo "Error: NB variable is required. Example: task notebook NB=01-notebook.ipynb HTML=true"
           exit 1
         fi
         
@@ -47,42 +46,41 @@ tasks:
           uv run python "notebooks/$NB"
         fi
         
+        
         if [ "$HTML" = "true" ]; then
-          mkdir -p supplementary
+          mkdir -p dist/supplementary
           if [ "$EXT" = "ipynb" ]; then
             quarto render "notebooks/$NB" --self-contained --toc
-            mv "notebooks/${STEM}.html" "supplementary/${STEM}.html"
+            mv "notebooks/${STEM}.html" "dist/supplementary/${STEM}.html"
           elif [ "$EXT" = "py" ]; then
-            uv run marimo export html "notebooks/$NB" -o "supplementary/${STEM}.html"
+            uv run marimo export html "notebooks/$NB" -o "dist/supplementary/${STEM}.html"
           fi
         fi
 
   notebook-marimo:
     desc: "Start the marimo notebook editor"
     cmds:
-      - uv run marimo edit notebooks/{{.NOTEBOOK}}
+      - uv run marimo edit notebooks/{{.NB}}
 
   make-toc:
     desc: "Generate contents.html table of contents"
     cmds:
-      - tree -H '' -T "My Project" -l -L 5 -o contents.html && sed -i '' 's|<a href="./supplementary/">supplementary</a>|supplementary|g' contents.html
+      - tree -H '' -T "My Project" -l -L 5 -o contents.html && sed -i '' 's|<a href="./supplementary/">supplementary</a>|supplementary|g; s|href="./../supplementary/|href="./|g' contents.html
     dir: dist
 
   dist:
     desc: "Make the project landing page for distribution"
     cmds:
-      - (cd ..; quarto render site)
-      - ln -fs ../site/_build/index.html .
-      - ln -fs ../manuscript/manuscript.pdf .
-      - ln -fs ../supplementary .
+      - quarto render site
+      - mv -f site/_build/index.html dist/index.html
+      - sd "manuscript.pdf" "$MANUSCRIPT.pdf" dist/index.html 
+      - rm -fr site/_build
       - task: make-toc
-    dir: dist
 
   pub-gdrive:
     desc: "Publish the paper to Google Drive"
     cmds:
-      - gdrive files update {{.FID}} manuscript.pdf
-      - gdrive files rename {{.FID}} {{.PUBNAME}}.pdf
-    dir: manuscript
+      - gdrive files update $GOOGLE_FID "$MANUSCRIPT.pdf"
+    dir: dist
 
 
