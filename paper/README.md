@@ -33,7 +33,7 @@ By default, generic names are used
 This command generates the [rendered manuscript.pdf](manuscript/manuscript.pdf) (in 2-column memo format):
 
 ```bash
-task render (TO=memo2)
+task render
 ```
 
 ### Re-run the supplementary computational notebooks
@@ -85,16 +85,17 @@ reused in different notebooks or scripts residing in other directories,
 or even invoked from other projects using the package once installed.
 
 ```python
-from <package>.dataset import load_data1
-from <package>.analysis import run_analysis1
-from <package>.plot import plot_result1
-from <package>.config import RAW_DATA_DIR
+from my_package.dataset import load_data1
+from my_package.analysis import run_analysis1
+from my_package.plot import plot_result1
+from my_package.config import RAW_DATA_DIR
 df=load_data1(RAW_DATA_DIR/"dataset.csv", remove_outliers=True)
 results=run_analysis1(df)
 plot_result1(results)
 ```
 
-where `<package>` is the Python package name for this project (replace with your own).
+where `my_package` is the Python package name for this project. 
+You can replace with your own.
 
 The package is automatically installed (with `uv run`), 
 along with its dependencies, 
@@ -106,10 +107,10 @@ Examples of Python development tasks:
 
 ```bash
 # Edit notebooks
-uv run jupyter notebook 01-notebook.py
-uv run marimo edit 02-notebook.py
+uv run jupyter notebook notebooks/01-notebook.py
+uv run marimo edit notebooks/02-notebook.py
 # Run unit tests
-uv run pytest
+uv run pytest -s
 ```
 
 ## To publish
@@ -118,7 +119,7 @@ uv run pytest
 
 You can publish the manuscript PDF to Gdrive
 using a Gdrive client like [gdrive](https://github.com/glotlabs/gdrive).
-Adjust the file ID and publication name in the `Taskfile.yml` file.
+Adjust the Google file ID  `.env` file.
 You first need to upload the PDF in the desired Gdrive folder,
 to create a file ID.
 
@@ -152,8 +153,4 @@ Other (non quarto) templates are available at:
 <https://github.com/eliahuhorwitz/Academic-project-page-template>
 
 Instead of a full website, the project can be shared as single HTML file with just the table of contents
-with the [contents file](dist/contents.html). Regenerate it needed with:
-
-```bash
-cd dist; tree -H '' -T "My Project" --noreport -o contents.html
-```
+with the [contents file](dist/contents.html), which could be rename to `index.html`.
