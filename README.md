@@ -6,10 +6,10 @@ The manuscript is rendered in a well-formatted PDF by [Quarto](https://quarto.or
 It is intended for technical papers (reports, preprints, ...) in engineering and science,
 where data analysis and visualization is done in Python.
 
-An example of a [generated PDF](examples/manuscript.pdf) file is included 
-in the examples folder.
+An example of a [generated PDF](dist/manuscript.pdf) file is included 
+in the `dist/` folder.
 
-<img width=800 src="examples/thumbnail.png">
+<img width=800 src="dist/thumbnail.png">
 
 > See [the companion medium article](https://medium.com/data-science-collective/turning-your-notes-into-pdf-technical-memos-or-data-science-reports-ddd150273cc6)
 > for more background on the related Quarto Tech Memo, which serves as the template for the manuscript.
@@ -26,7 +26,6 @@ for the project structure and best practices for data science and scientific com
 for the report rendering as a well-formatted PDF tech memo or pre-print paper.
 
 
-
 ## Contents
 
 The skeleton contains:
@@ -37,6 +36,7 @@ The skeleton contains:
 * The data-intensive figures, which can be re-generated on demand. 
 * Simple automation command(s) to render the paper and re-run the supplementary computational notebooks
 (e.g. to update the figures when data or code has changed).
+* A project landing page providing a single-page overview of the project that can be published as a website.
 
 ## Features 
 
@@ -66,16 +66,27 @@ for a smooth writing experience (auto-completion, live & sync preview, spell che
 
 The paper also includes supplementary materials in the form of computational notebooks.
 These are exported as standalone HTML files to supplement the manuscript.
-
-## Project landing page
-
-Typically the whole package, the manuscript and the supplementary HTML files, would be published online.
-As an example, they are published on the repo Gitlab pages: https://gael-close.github.io/quarto-tech-paper/contents. 
+As an example, they are published on the repo Gitlab pages: <https://gael-close.github.io/quarto-tech-paper/contents.html>. 
 
 The first notebook is a standard Jupyter notebook, and provides the source of the plot in the paper.
 The second one is the [tutorial marimo notebook](https://marimo.io/).
 See also [this article](https://towardsdatascience.com/why-im-making-the-switch-to-marimo-notebooks/)
 for the motivation behind this new notebook format.
+
+
+## Project landing page
+
+The skeleton also provides a project landing page example
+aggregating the project materials in a single page to be published online.
+Here is the included example: <https://gael-close.github.io/quarto-tech-paper>.
+
+<iframe src="https://gael-close.github.io/quarto-tech-paper/index.html" width="100%" height="1000px" border="1px solid #e5e7eb" border-radius="0.5rem" allowfullscreen></iframe>
+
+It is also rendered by Quarto for consistency.
+Other (non quarto) templates are available at: 
+<https://github.com/eliahuhorwitz/Academic-project-page-template>
+
+
 
 ## Getting started
 
