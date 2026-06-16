@@ -65,9 +65,12 @@ for a smooth writing experience (auto-completion, live & sync preview, spell che
 ## Supplementary materials
 
 The paper also includes supplementary materials in the form of computational notebooks.
-These are exported as standalone HTML files to supplement the manuscript in the `example` folder.
+These are exported as standalone HTML files to supplement the manuscript.
+
+## Project landing page
+
 Typically the whole package, the manuscript and the supplementary HTML files, would be published online.
-As an example, they are published on the repo Gitlab pages: https://gael-close.github.io/quarto-tech-paper. 
+As an example, they are published on the repo Gitlab pages: https://gael-close.github.io/quarto-tech-paper/contents. 
 
 The first notebook is a standard Jupyter notebook, and provides the source of the plot in the paper.
 The second one is the [tutorial marimo notebook](https://marimo.io/).
@@ -80,22 +83,22 @@ Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 and [taskfile.dev](https://taskfile.dev/docs/installation) 
 as described in their documentation. 
 
-Then run the following to install the project dependencies, 
-render the paper, and open the generated files 
-PDF of the paper and HTML for the supplementary materials
-for visual inspection.
-
+Then run the following to install the project dependencies,
+and instantiate the project template.
 
 ```bash
 # Get the template
 uvx cookiecutter gh:gael-close/quarto-tech-paper
 cd new-dir
+```
+Then run the required task (see `tasks list`) and the README in the instantiated project folder.
 
-# Run the tasks (see `tasks list`)
+```bash
 task install
 task render
 ...
 ```
+
 
 ## Optional files
 
@@ -108,12 +111,15 @@ To enable them, move them in the root folder.
 To run a complete test suite to check that everything is working as expected.
 
 ```bash
-task test-all
 
-# Once all tests pass, save the examples
-task save-examples
+task setup render-all
+# Check 
+open new-dir/dist/contents.html
+
+# Once all tests pass, save the example
+task save-example
+open dist/contents.html # should be the same as above
 ```
-
 
 
 

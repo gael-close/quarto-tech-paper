@@ -6,6 +6,7 @@ import sys
 import yaml
 import socket
 from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
 
 # Configure loguru with tqdm.write
 logger.remove()
@@ -31,7 +32,7 @@ class Settings(BaseSettings):
         env_file = '.env'
 
 # Load settings from YAML file
-settings_path = PROJ_ROOT / 'settings.yaml'
+settings_path = PROJ_ROOT / 'settings.yml'
 with open(settings_path) as f:
     settings_dict = yaml.safe_load(f)
 

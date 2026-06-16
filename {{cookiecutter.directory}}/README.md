@@ -12,6 +12,7 @@ This is for Python environment management and task automation, respectively.
 
 The command `task list` shows the available tasks,
 and `task <taskname> --dry` shows the commands to be executed.
+The tasks are defined in the [Taskfile.yml](Taskfile.yml) file.
 
 ## Installation
 
@@ -106,12 +107,46 @@ uv run pytest
 
 ## To publish
 
-The materials to be distributed should be collected in the dist/ folder,
+### PDF to Gdrive
+
+You can publish the manuscript PDF to Gdrive
+using a Gdrive client like [gdrive](https://github.com/glotlabs/gdrive).
+Adjust the file ID and publication name in the `Taskfile.yml` file.
+You first need to upload the PDF in the desired Gdrive folder,
+to create a file ID.
+
+
+```shell
+task pub-gdrive
+```
+
+
+### Distribute as a website
+
+It is also possible to publish the materials to GitLab/GitHub pages as a mini website,
+called a project landing page.
+This can includes the paper PDF and the HTML for the supplementary materials.
+Collect the material in the dist/ folder, either via symlink or plain copy.
 possibly via symlinks.
 
-Use gitlab or github CI actions to publish it (see in the optional folder).
-Regenerate the index if needed with:
+Either use GitLab or GitHub actions to publish automatically on every commit. 
+See in the optional folder for the action file to be used in this case.
+
+Create a proper website page embedding the PDF and the supplementary materials.
+Enrich it with a proper abstract, link to videos, and other highlights.
+A Quarto example is provided in [site/index.qmd](site/index.qmd).
+It can be build into a proper website ready for distribution with:
+
+```shell
+task dist
+```
+
+Other (non quarto) templates are available at: 
+<https://github.com/eliahuhorwitz/Academic-project-page-template>
+
+Instead of a full website, the project can be shared as single HTML file with just the table of contents
+with the [contents file](dist/contents.html). Regenerate it needed with:
 
 ```bash
-cd dist; tree -H '.' -T "My Project" -o index.html
+cd dist; tree -H '' -T "My Project" -o contents.html
 ```

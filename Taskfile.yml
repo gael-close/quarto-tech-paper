@@ -1,10 +1,8 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
-
 version: '3'
 
 vars:
-  # New variable with default
-  USE_GITHUB: '{{.Github | default "false"}}'
+  GITHUB: 'false'
 
 tasks:
   setup:
@@ -12,12 +10,12 @@ tasks:
     cmds:
       - rm -fr new-dir
       - |
-        if [ "{{.USE_GITHUB}}" = "true" ]; then
+        if [ "{{.GITHUB}}" = "true" ]; then
           uvx cookiecutter gh:gael-close/quarto-tech-paper --no-input
         else
           uvx cookiecutter . --no-input
         fi
-      - defer: rm -rf .venv # Optional: clean up if the sync fails halfway
+      - defer: rm -rf venv # Optional: clean up if the sync fails halfway
       - cd new-dir && uv sync --extra dev
   basic-test:
     desc: Basic test
@@ -25,8 +23,9 @@ tasks:
       - uv run pytest -s
     dir: new-dir
  
-  render:
-    desc: Render the paper
+  
+  render-all:
+    desc: Render all supplementary materials and the paper
     cmds:
     - |
       task notebook NOTEBOOK=01-notebook.ipynb HTML=true
@@ -36,25 +35,29 @@ tasks:
         echo "Error: HTML files were not created in new-dir/supplementary!"
         exit 1
       fi
+
+      task dist
     dir: new-dir
 
   view:
-    desc: View the paper
+    desc: View all generated files (paper PDF and supplementary HTML)
     cmds: 
       - open manuscript/manuscript.pdf
       - open supplementary/01-notebook.html
       - open supplementary/02-notebook.html
     dir: new-dir
   
-  save-examples:
-    desc: Save the examples
+  save-example:
+    desc: Distribute the landing page as an example (with Quarto site sidebar)
     cmds:
       - |
-        cp ../new-dir/manuscript/*.pdf .
-        cp -r ../new-dir/supplementary .
-        magick -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png
-        tree -H '' -I rest > index.html
-    dir: examples
+        # Create dist folder from the rendered site
+        rm -fr dist
+        cp -Lr new-dir/dist dist
+      
+        # Generate thumbnail
+        (cd dist && magick -density 150 manuscript.pdf -quality 90 -background white -alpha remove thumbnail.png)
+  
   test-all:
     desc: Run all tests from scratch
     cmds:
