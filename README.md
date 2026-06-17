@@ -97,15 +97,17 @@ Other (non quarto) templates are available at:
 - [Git](https://git-scm.com/install/)
 
 
-**Download the template** (this will create `quarto-tech-paper/paper` directory).
+**Download the template** (fully cross-platform)
 
 ```bash
 git clone --depth 1 --filter=blob:none --sparse https://github.com/gael-close/quarto-tech-paper.git
-cd quarto-tech-paper && git sparse-checkout set --no-cone "paper/**"
-cd paper && cp .env.example .env
+cd quarto-tech-paper
+git sparse-checkout set --no-cone "paper/**"
+cd paper
+git show HEAD:paper/.env.example > .env
 ```
 
-This creates the `paper` directory with the template files.
+This will create a populated `quarto-tech-paper/paper` directory
 Move it to your desired location.
 
 **Install all dependencies:**
