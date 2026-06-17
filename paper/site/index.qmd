@@ -30,6 +30,18 @@ One could also embed video, images, and other media.
 </div>
 ```
 
+# Supplementary
+
+Follow the [IEEE guidelines for preparing supplementary materials](https://journals.ieeeauthorcenter.ieee.org/create-your-ieee-journal-article/prepare-supplementary-materials/).
+
+
+* [01-notebook.html](supplementary/01-notebook.html) is a Python notebook showing ...
+* [02-notebook.html](supplementary/02-notebook.html) is a Python notebook showing ...
+* 03-video.mp4 is a video showing ...
+
+**Overall size: xxx MB**
+
+
 # Citation
 
 ```bibtex

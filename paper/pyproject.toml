@@ -86,7 +86,7 @@ sd 'href=\"./../supplementary/' 'href=\"./' dist/contents.html \
 
 pub-gdrive = { cmd = "uv run python ../scripts/upload-to-gdrive.py --name \"$SHORT_TITLE.pdf\" --id $GOOGLE_FID", cwd = "dist" }
 
-consistent-title = """
+config = """
 sd '^title:.*' "title: $SHORT_TITLE" manuscript/manuscript.md && \
 sd '^title:.*' "title: $SHORT_TITLE" site/index.qmd
 """
