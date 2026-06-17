@@ -34,8 +34,7 @@ tmp/
 
 # Ignore generated files of the template paper
 paper/manuscript/
-paper/dist/**/*.pdf
-paper/dist/**/*.html
+paper/dist/
 
 
 /.luarc.json
