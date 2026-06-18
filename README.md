@@ -93,22 +93,23 @@ Other (non quarto) templates are available at:
 ## Getting started
 
 **Prerequisites:**
-- [pixi](https://pixi.sh/latest/#installation) for cross-platform task automation and environment managemen
+- [pixi](https://pixi.sh/latest/#installation) for cross-platform task automation and environment management
 - [Git](https://git-scm.com/install/)
 
 
 **Download the template** (fully cross-platform)
 
 ```bash
-git clone --depth 1 --filter=blob:none --sparse https://github.com/gael-close/quarto-tech-paper.git
-cd quarto-tech-paper
-git sparse-checkout set --no-cone "paper/**"
-cd paper
-git show HEAD:paper/.env.example > .env
+curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash -s -- ~/my-paper
 ```
 
-This will create a populated `quarto-tech-paper/paper` directory
-Move it to your desired location.
+Or to download to current directory:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash
+```
+
+This creates a `quarto-tech-paper/paper` subdirectory with all necessary files and `.env` initialized.
 
 **Install all dependencies:**
 

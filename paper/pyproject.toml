@@ -44,7 +44,6 @@ channels = ["conda-forge"]
 platforms = ["osx-64", "osx-arm64", "linux-64"]
 
 [tool.pixi.dependencies]
-python = ">=3.11"
 uv = "*"
 quarto = "*"
 sd = "*"
