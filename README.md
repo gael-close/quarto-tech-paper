@@ -17,6 +17,21 @@ in the `dist/` folder.
 > See [the companion medium article](https://medium.com/data-science-collective/turning-your-notes-into-pdf-technical-memos-or-data-science-reports-ddd150273cc6)
 > for more background on the related Quarto Tech Memo, which serves as the template for the manuscript.
 
+## TL;DR
+
+Assuming you have [pixi](https://pixi.sh/latest/#installation) installed,
+`bash` and `git` available in your path. In a `bash` shell:
+
+Download the template, and render the paper to PDF with:
+```bash
+curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash
+cd paper
+pixi install
+pixi run render 
+```
+
+See the [full documentation](#details-on-getting-started) for more details.
+
 ## Prior work
 
 It is built upon:
@@ -90,31 +105,36 @@ Other (non quarto) templates are available at:
 <https://github.com/eliahuhorwitz/Academic-project-page-template>
 
 
-## Getting started
+## Details on getting started
 
-**Prerequisites:**
-- [pixi](https://pixi.sh/latest/#installation) for cross-platform task automation and environment management
-- [Git](https://git-scm.com/install/) with the built-in bash extension for Windows.
+**Install [pixi](https://pixi.sh/latest/#installation)**
+for cross-platform task automation and environment management.
 
-
-```powershell
-[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\Program Files\Git\bin", "User")
+On macOS
+```bash
+curl -fsSL https://pixi.sh/install.sh | bash; export PATH="$PATH:$HOME/.pixi/bin"; echo 'export PATH="$PATH:$HOME/.pixi/bin"' >> ~/.zshrc; pixi global install git; bash
 ```
 
+On Windows (install `bash` and `git` as global pixi tools)
+
+```powershell
+irm https://pixi.sh/install.ps1 | iex; $env:Path += ";$env:LocalAppData\pixi\bin"; pixi global install bash git; bash
+```
 
 **Download the template**
 
-Linux/macOS:
-```bash
-bash -c 'curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash'
-```
-
-Windows PowerShell:
-```powershell
-iex (iwr https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh).Content
-```
-
+Navigate to a folder where you want to download the template.
 This creates a `paper` directory in your current location with all necessary files and `.env` initialized.
+
+```bash
+#1. Drop in bash (from windows Powershell)
+bash
+
+# 2. Download the template
+curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash
+
+cd paper
+```
 
 **Install all dependencies:**
 
@@ -216,15 +236,7 @@ open dist/contents.html
 ```
 
 You can also download the template directly into another folder for testing:
-
-Linux/macOS:
 ```bash
 (cd ~/Downloads && bash /Users/gcl/MyData/Work/MLX/Box_4/quarto-tech-paper/download-template.sh)
-```
-
-And test it also on Windows PowerShell:
-```powershell
-cd ~/Downloads; 
-iex (Get-Content /Users/gcl/MyData/Work/MLX/Box_4/quarto-tech-paper/download-template.sh -Raw)
 ```
 
