@@ -94,22 +94,27 @@ Other (non quarto) templates are available at:
 
 **Prerequisites:**
 - [pixi](https://pixi.sh/latest/#installation) for cross-platform task automation and environment management
-- [Git](https://git-scm.com/install/)
+- [Git](https://git-scm.com/install/) with the built-in bash extension for Windows.
 
 
-**Download the template** (fully cross-platform)
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash -s -- ~/my-paper
+```powershell
+[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\Program Files\Git\bin", "User")
 ```
 
-Or to download to current directory:
 
+**Download the template**
+
+Linux/macOS:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash
+bash -c 'curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash'
 ```
 
-This creates a `quarto-tech-paper/paper` subdirectory with all necessary files and `.env` initialized.
+Windows PowerShell:
+```powershell
+iex (iwr https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh).Content
+```
+
+This creates a `paper` directory in your current location with all necessary files and `.env` initialized.
 
 **Install all dependencies:**
 
@@ -193,15 +198,11 @@ Then publish the paper to Google Drive with:
 
 ```bash
 pixi run pub-gdrive
-````
-
-## Optional files
-
-A few optional recommended git config files are available in the `optional/` folder.
-To enable them, move them in the root folder.
+```
 
 
-## Development of the test harness
+
+## Development
 
 To develop, as opposed to use, the template itself,
 install[taskfile.dev](https://taskfile.dev/docs/installation).
@@ -214,5 +215,16 @@ task setup render-all save-example
 open dist/contents.html
 ```
 
+You can also download the template directly into another folder for testing:
 
+Linux/macOS:
+```bash
+(cd ~/Downloads && bash /Users/gcl/MyData/Work/MLX/Box_4/quarto-tech-paper/download-template.sh)
+```
+
+And test it also on Windows PowerShell:
+```powershell
+cd ~/Downloads; 
+iex (Get-Content /Users/gcl/MyData/Work/MLX/Box_4/quarto-tech-paper/download-template.sh -Raw)
+```
 
