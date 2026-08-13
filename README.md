@@ -19,15 +19,27 @@ in the `dist/` folder.
 
 ## TL;DR
 
-Assuming you have [pixi](https://pixi.sh/latest/#installation) installed,
-`bash` and `git` available in your path. In a `bash` shell:
+Assuming you have [pixi](https://pixi.sh/latest/#installation) installed.
+Navigate to a new folder where you want to download the template, 
+then download the template, install dependencies, and render the paper to PDF with:
 
-Download the template, and render the paper to PDF with:
+**Linux/macOS/Git Bash[^1]:**
 ```bash
+<<<<<<< HEAD
 curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash
 cd paper
 pixi install
 pixi run render-paper
+=======
+curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/init.sh | bash
+pixi run render
+```
+
+**Windows PowerShell:**
+```powershell
+iex (iwr https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/init.ps1).Content
+pixi run render
+>>>>>>> 7cfc334 (Clean up README with pixi)
 ```
 
 See the [full documentation](#details-on-getting-started) for more details.
@@ -105,28 +117,14 @@ Other (non quarto) templates are available at:
 <https://github.com/eliahuhorwitz/Academic-project-page-template>
 
 
-## Details on getting started
+## Additional tasks
 
-**Install [pixi](https://pixi.sh/latest/#installation)**
-for cross-platform task automation and environment management.
+All pixi tasks are cross-platform and can be run on Linux, macOS, and Windows.
 
-On macOS
-```bash
-curl -fsSL https://pixi.sh/install.sh | bash; export PATH="$PATH:$HOME/.pixi/bin"; echo 'export PATH="$PATH:$HOME/.pixi/bin"' >> ~/.zshrc; pixi global install git; bash
-```
-
-On Windows (install `bash` and `git` as global pixi tools)
-
-```powershell
-irm https://pixi.sh/install.ps1 | iex; $env:Path += ";$env:LocalAppData\pixi\bin"; pixi global install bash git; bash
-```
-
-**Download the template**
-
-Navigate to a folder where you want to download the template.
-This creates a `paper` directory in your current location with all necessary files and `.env` initialized.
+**Optional**
 
 ```bash
+<<<<<<< HEAD
 #1. Drop in bash (from windows Powershell)
 bash
 
@@ -147,6 +145,11 @@ pixi info                  # View environment info
 pixi list                  # List installed packages
 pixi run check-import      # Verify local package is importable
 pixi run pytest -s         # Run tests
+=======
+pixi list
+pixi run check-import
+pixi run pytest -s
+>>>>>>> 7cfc334 (Clean up README with pixi)
 ```
 
 **Configuration**
@@ -191,10 +194,18 @@ pixi task info <task> # Show details for a specific task
 # Render paper to PDF
 pixi run render-paper
 
+<<<<<<< HEAD
 # Execute and convert notebooks to HTML
 NB=01-notebook.ipynb pixi run notebook
 NB=02-notebook.py pixi run notebook-marimo
 # on Windows: env:NB="01-notebook.ipynb"; pixi run notebook
+=======
+# Process all notebooks
+pixi run notebook
+
+# Or run the script directly with custom notebooks
+python scripts/notebook.py 01-notebook.ipynb 02-notebook.py --exec
+>>>>>>> 7cfc334 (Clean up README with pixi)
 
 # Build distribution website
 pixi run render-site
@@ -238,7 +249,6 @@ pixi run pub-gdrive
 ```
 
 
-
 ## Development
 
 To develop, as opposed to use, the template itself,
@@ -254,6 +264,10 @@ open dist/contents.html
 
 You can also download the template directly into another folder for testing:
 ```bash
-(cd ~/Downloads && bash /Users/gcl/MyData/Work/MLX/Box_4/quarto-tech-paper/download-template.sh)
+rm -rf ~/Downloads/paper/* 2>/dev/null
+mkdir -p ~/Downloads/paper && cd $_
+bash /Users/gcl/MyData/Work/MLX/Box_4/quarto-tech-paper/init.sh
 ```
+
+[^1]: On Windows, Git includes built-in Git Bash which provides the bash shell required to run the download script and commands. 
 
