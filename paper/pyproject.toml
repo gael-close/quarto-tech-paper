@@ -1,6 +1,8 @@
-[build-system]
-requires = ["setuptools>=61.0.0"]
-build-backend = "setuptools.build_meta"
+# ---------------------------------------------------------------------------
+# USER CONFIGURATION — edit this section to customise your paper
+# ---------------------------------------------------------------------------
+[tool.pixi.activation.env]
+SHORT_TITLE = "Quarto Tech Paper Example"   # PDF filename and paper title
 
 [project]
 name = "my_package"
@@ -38,7 +40,14 @@ dependencies = [
 [project.scripts]
 plots = "my_package.plots:app"
 
-# --- PIXI SECTIONS EMBEDDED HERE ---
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+
+# ---------------------------------------------------------------------------
+# PIXI — dependency and task management (do not edit unless you know what you are doing)
+# ---------------------------------------------------------------------------
 [tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["osx-64", "osx-arm64", "linux-64"]
@@ -55,9 +64,6 @@ tree = "*"
 
 [tool.pixi.pypi-dependencies]
 my_package = { path = ".", editable = true }
-
-[tool.pixi.activation.env]
-SHORT_TITLE = "Quarto Tech Paper Example"
 
 [tool.pixi.tasks]
 check-import = "python -c 'import my_package; print(\"SUCCESS!\")'"

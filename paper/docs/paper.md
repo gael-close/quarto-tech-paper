@@ -1,5 +1,5 @@
 ---
-title: Formatting Technical Memo with Quarto
+title: Quarto Tech Paper Example
 subtitle: A minimum example using the quarto-tech-memo extension
 abstract: |-
   This is an minimum technical memo containing the usual elements of technical writing: 
