@@ -1,13 +1,8 @@
 from pathlib import Path
 from loguru import logger
 from pyprojroot import here
-from tqdm import tqdm
 import sys
-from pydantic_settings import BaseSettings
-
-# Configure loguru with tqdm.write
-logger.remove()
-logger.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Paths
 PROJ_ROOT = here()
@@ -21,12 +16,9 @@ logger.info(f"Python executable: {sys.executable}")
 
 # Settings
 class Settings(BaseSettings):
-    GOOGLE_ID: str
-    SHORT_TITLE: str
-    ESP32S3_USB_VID: str
-    ESP32S3_USB_PID: str
-    BAUD_RATE: int
-    
+    GOOGLE_FID: str | None = None
+    SHORT_TITLE: str = "paper"
+
     # Modern Pydantic V2 Configuration
     model_config = SettingsConfigDict(
         env_file=PROJ_ROOT / '.env',

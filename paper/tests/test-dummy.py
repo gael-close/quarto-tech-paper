@@ -14,14 +14,14 @@
 
 """
 # %% Init
+from my_package.myinit import *
+from my_package.config import *
 import pytest
 from typer.testing import CliRunner
 
 # All modules in development
-from my_package.myinit import *
 from my_package.dataset import *
 from my_package.plots import *
-
 
 
 # %% Test the device tables

@@ -56,39 +56,44 @@ tree = "*"
 [tool.pixi.pypi-dependencies]
 my_package = { path = ".", editable = true }
 
+[tool.pixi.activation.env]
+SHORT_TITLE = "Quarto Tech Paper Example"
+
 [tool.pixi.tasks]
 check-import = "python -c 'import my_package; print(\"SUCCESS!\")'"
+basic-test = "pytest -s"
 
-render = { cmd = """
-quarto-tech-memo manuscript.md --to memo2 && \
-mv manuscript.pdf ../dist/"$SHORT_TITLE.pdf"
-""", cwd = "manuscript" }
+render-paper = { cmd = """
+quarto render paper.md --to memo2-typst && \
+mv paper.pdf "../dist/$SHORT_TITLE.pdf"
+""", cwd = "docs" }
 
 notebook = """
 jupyter nbconvert --to notebook --inplace --execute notebooks/$NB && \
-quarto render notebooks/$NB --to html --output-dir dist/supplementary --embed-resources --toc
+quarto render notebooks/$NB --to html --output-dir ../dist/supplementary --embed-resources --toc
 """
 
 notebook-marimo = """
 BASE=$(basename $NB .py) && \
 marimo export html notebooks/$BASE.py -o dist/supplementary/$BASE.html"""
 
-dist = """
-quarto render site && \
-mv site/_build/index.html dist/index.html && \
-sd 'manuscript.pdf' '$SHORT_TITLE.pdf' dist/index.html && \
-rm -fr site/_build && \
-tree -H '' -T 'My Project' -l -L 5 -o dist/contents.html && \
-sd '<a href=\"./supplementary/\">supplementary</a>' 'supplementary' dist/contents.html && \
-sd 'href=\"./../supplementary/' 'href=\"./' dist/contents.html \
+render-site = """
+quarto render docs/ && \
+sd 'paper.pdf' "$SHORT_TITLE.pdf" dist/index.html && \
+(cd dist && tree -H '' -T 'My Project' -l -L 3 --noreport -o contents.html) \
 """
 
-pub-gdrive = { cmd = "uv run python ../scripts/upload-to-gdrive.py --name \"$SHORT_TITLE.pdf\" --id $GOOGLE_FID", cwd = "dist" }
+pub-gdrive = { cmd = """
+uv run python ../scripts/upload-to-gdrive.py --name "$SHORT_TITLE.pdf"
+""", cwd = "dist" }
 
-config = """
-sd '^title:.*' "title: $SHORT_TITLE" manuscript/manuscript.md && \
-sd '^title:.*' "title: $SHORT_TITLE" site/index.qmd
-"""
+setup = { cmd = """
+quarto add gael-close/quarto-tech-memo --no-prompt && \
+sd '^title:.*' "title: $SHORT_TITLE" paper.md && \
+sd '^title:.*' "title: $SHORT_TITLE" index.md
+""", cwd = "docs" }
+
+
 
 [tool.jupytext]
 formats = "ipynb,py:percent"

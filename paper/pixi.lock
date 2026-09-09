@@ -2924,7 +2924,7 @@ packages:
 - pypi: ./
   name: my-package
   version: 0.1.0
-  sha256: cad3ed6bdaca014213c9953a9fad6ec74327882ed0c4aa44823733f9f066dba9
+  sha256: fe40a285d1a23fc24e3bb9cec781e4ee07dcf0582c63fbe71ae1f143d13d2ebc
   requires_dist:
   - forallpeople>=2.7.0
   - holoviews>=1.19.1

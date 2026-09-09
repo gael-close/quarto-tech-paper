@@ -52,6 +52,14 @@ import logging
 
 logging.getLogger("param").setLevel(logging.ERROR)
 
+# Loguru: configure for interactive notebook sessions
+# tqdm.write() keeps log messages from breaking tqdm progress bars
+from loguru import logger
+from tqdm import tqdm
+
+logger.remove()
+logger.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
+
 # Styles
 mpl.rcParams.update(
     {

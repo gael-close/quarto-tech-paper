@@ -1,7 +1,9 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
 
-
+dotenv:
+  - 'paper/.env'
+  - '.env'
 
 tasks:
   setup:
@@ -9,23 +11,19 @@ tasks:
         GITHUB: '{{.GITHUB | default "false"}}'
     desc: Setup the project
     cmds:
-      - uvx cookiecutter -f gh:gael-close/quarto-tech-memo --no-input directory='manuscript' filename='manuscript'
-      - uv sync --extra dev
-      - uv run pytest -s
-      - pixi run consistent-title
+      - uvx cookiecutter -f gh:gael-close/quarto-tech-memo --no-input directory='docs' filename='paper'
+      - pixi install
+      - pixi run setup
     dir: paper
   
   
   render-all:
     desc: Render all supplementary materials and the paper
     cmds:
-    - |
-      pixi run notebook -- 01-notebook.ipynb
-      pixi run notebook-marimo -- 02-notebook.py
-      pixi run render
-      pixi run dist
-      echo ""
-      echo "Running consistency checks..."
+    - NB=01-notebook.ipynb pixi run notebook
+    - NB=02-notebook.py pixi run notebook-marimo
+    - pixi run render-paper
+    - pixi run render-site
     dir: paper
 
 
@@ -44,15 +42,16 @@ tasks:
         rm -rf dist && mkdir dist && cp -R paper/dist/* dist/
         cd dist
         magick -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png 2>/dev/null && echo "✓ Thumbnail: thumbnail.png" || echo "⚠ Thumbnail generation skipped"
-        PROJECT_DIR="$(cd ../new-dir && pwd)" SCREENSHOT_WIDTH=1280 SCREENSHOT_HEIGHT=900 SCREENSHOT_WAIT=3000 chrome-screenshot.sh "$(pwd)/index.html" index.png && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
+        PROJECT_DIR="$(cd ../paper && pwd)" SCREENSHOT_WIDTH=1280 SCREENSHOT_HEIGHT=900 SCREENSHOT_WAIT=3000 chrome-screenshot.sh "$(pwd)/index.html" index.png && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
       - cmd: ./check.sh
        
   
   test-all:
     desc: Run all tests from scratch
     cmds:
+    - rm -rf paper/dist && mkdir -p paper/dist/supplementary
     - task: setup
-    - pixi run basic-test
-    - pixi run render
+    - task: render-all
+    - task: save-example
     - task: view
   

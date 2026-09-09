@@ -1,70 +1,28 @@
-
 # A Quarto Tech Paper Example
 
+See the full documentation at <https://github.com/gael-close/quarto-tech-paper>.
 
+## Quick start
 
-
-## Introduction
-
-The project structure is based on: https://github.com/gael-close/quarto-tech-paper.
-
-
-
-## Installation
-
-
-
-**Install all dependencies:**
 ```bash
-# Install ALL dependencies (conda packages + Python packages + local package)
 pixi install
+cp .env.example .env   # edit: SHORT_TITLE, GOOGLE_FID, RCLONE_DRIVE_TOKEN
+pixi run setup         # install Quarto extensions + apply title
 ```
 
-
-To verify the installation:
+## Common tasks
 
 ```bash
-pixi list
-pixi run check-import
-pixi run pytest -s
+pixi run render-paper                    # render paper.qmd → dist/<TITLE>.pdf
+NB=01-notebook.ipynb pixi run notebook   # execute notebook → dist/supplementary/
+NB=02-notebook.py pixi run notebook-marimo
+pixi run render-site                     # build landing page → dist/index.html
+pixi run pub-gdrive                      # upload PDF to Google Drive
 ```
-
-
-
-
-
-
 
 ## Publishing
 
-### Google Drive
-
-
-1. **First-time setup:**
-   - Create Google Drive API credentials ([instructions](https://console.cloud.google.com/))
-   - Place `client_secrets.json` in `~/.config/pixi_gdrive/`
-   - Run `pixi run pub-gdrive` - browser auth will open once
-
-2. **Set file ID in `.env`:**
-   ```
-   GOOGLE_FID=your_google_drive_file_id
-   ```
-
-3. **Publish:**
-   ```bash
-   
-   ```
-
-See [scripts/README.md](scripts/README.md) for detailed setup instructions.
-
-### Website Distribution
-
-Build a landing page with embedded PDF and supplementary materials:
-
-```bash
-pixi run dist
-```
-
-The output in `dist/` can be deployed to GitHub/GitLab Pages. Example workflow files are in `optional/`.
-
-Customize the landing page in [site/index.qmd](site/index.qmd).
+- **Google Drive** — requires `rclone` on `PATH` and `RCLONE_DRIVE_TOKEN` in `.env`.
+  Obtain a token once with `rclone authorize "drive"`.
+- **GitLab Pages** — `dist/` is deployed automatically via [`.gitlab-ci.yml`](.gitlab-ci.yml).
+  Customize the landing page in [docs/index.md](docs/index.md).

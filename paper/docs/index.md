@@ -9,6 +9,34 @@ metadata:
 categories:
   - Template
   - Technical Paper
+
+format:
+  html:
+    theme: default
+    toc: true
+    toc-location: right
+    toc-title: "Contents"
+    standalone: true
+    embed-resources: true
+
+website:
+  title: "Project Landing Page"
+  navbar:
+    left: []
+  search: false
+  sidebar:
+    style: floating
+    contents:
+      - section: "Supplementary"
+        contents:
+          - text: "📹 Video Demo"
+            href: "https://www.youtube.com/watch?v=10evZqkg7gM&t=62s"
+          - text: "📓 Jupyter Notebook"
+            href: "supplementary/01-notebook.html"
+          - text: "📓 Marimo Notebook"
+            href: "supplementary/02-notebook.html"
+          - text: "🔗 GitHub Source"
+            href: "https://github.com/MilanAmighi/ICRA-2026-Hands-on-tutorial-3D-tactile-sensor-integration-in-robotic-fingers-for-smart-manipulation"
 ---
 
 

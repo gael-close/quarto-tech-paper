@@ -1,6 +1,0 @@
-{
-    "directory": "new-dir",
-    "name": "A Quarto Tech Paper Example",
-    "_copy_without_render": ["**/static.yml", "Taskfile.yml"]
-}
-

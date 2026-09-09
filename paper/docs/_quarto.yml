@@ -1,0 +1,4 @@
+project:
+  output-dir: ../dist
+  render:
+    - index.md

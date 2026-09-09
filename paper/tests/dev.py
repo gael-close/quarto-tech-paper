@@ -12,6 +12,7 @@ Can be run from VScode
 Can be run as standalone exec script: tests/dev.py
 '''
 
+from my_package.myinit import *
 from my_package.config import *
 
 # Autoreload in Notebook only

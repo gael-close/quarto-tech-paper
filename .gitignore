@@ -27,14 +27,10 @@ _plots/
 *_files/
 _build/
 tmp/
+paper/dist/
 
 # Quarto
 .quarto/
 **/*.quarto_ipynb
-
-# Ignore generated files of the template paper
-paper/manuscript/
-paper/dist/
-
-
+paper/docs/_extensions/
 /.luarc.json

@@ -9,7 +9,7 @@ where data analysis and visualization is done in Python.
 **Quarto** is used to render the paper as PDF, and the support materials (mostly Python notebooks) as HTML.
 A project landing page, which can be published online as a single entry point, is also generated based on <https://gael-close.github.io/quarto-tech-paper/>.
 
-An example of a [generated PDF](dist/manuscript.pdf) file is included 
+An example of a [generated PDF](dist/Quarto%20Tech%20Paper%20Example.pdf) file is included 
 in the `dist/` folder.
 
 <img width=800 src="dist/thumbnail.png">
@@ -27,7 +27,7 @@ Download the template, and render the paper to PDF with:
 curl -fsSL https://raw.githubusercontent.com/gael-close/quarto-tech-paper/HEAD/download-template.sh | bash
 cd paper
 pixi install
-pixi run render 
+pixi run render-paper
 ```
 
 See the [full documentation](#details-on-getting-started) for more details.
@@ -79,7 +79,7 @@ for a smooth writing experience (auto-completion, live & sync preview, spell che
 | Makefile           | pixi tasks      |
 
 [pixi](https://pixi.sh/) is a modern and fast tool to manage Python dependencies (with its own built-in `uv`) and environments (including non-Python dependencies).
-It can also runs project tasks (e.g. `pixi run render` to render the paper in a cross-platform way).
+It can also runs project tasks (e.g. `pixi run render-paper` to render the paper in a cross-platform way).
 
 ## Supplementary materials
 
@@ -143,19 +143,33 @@ cd paper
 pixi install
 
 # Optional checks
-pixi list
-pixi run check-import
-pixi run pytest -s
+pixi info                  # View environment info
+pixi list                  # List installed packages
+pixi run check-import      # Verify local package is importable
+pixi run pytest -s         # Run tests
 ```
 
 **Configuration**
 
-Set the variables via the `.env` file:
-- `SHORT_TITLE` - Paper short title, also served as PDF filename (default: "manuscript.pdf")
-- `GOOGLE_FID` - Google Drive folder ID for publishing (=uploading) the paper
+Edit two places with your paper title and credentials:
 
+1. `pyproject.toml` — sets `SHORT_TITLE` for all pixi tasks:
+```toml
+[tool.pixi.activation.env]
+SHORT_TITLE = "My Paper Title"
+```
+
+2. `.env` — secrets and publishing settings (copy from `.env.example`):
 ```bash
-pixi run config
+cp .env.example .env
+# then edit:
+#   GOOGLE_FID     – Google Drive folder ID
+#   RCLONE_DRIVE_TOKEN – rclone OAuth token (see Publishing section)
+```
+
+Then apply the title to the source files:
+```bash
+pixi run setup
 ```
 
 **Discover available tasks:**
@@ -167,20 +181,23 @@ pixi task list        # List all available tasks
 pixi task info <task> # Show details for a specific task
 ```
 
+> Prefix all standard CLI commands with `pixi run`,
+> or load the environment once with `pixi shell`.
+> Named tasks must always be called with `pixi run <task>`.
+
 **Common workflows:**
 
-
 ```bash
-# Render manuscript to PDF
-pixi run render
+# Render paper to PDF
+pixi run render-paper
 
 # Execute and convert notebooks to HTML
-NB=01-notebook.ipynb pixi run notebook 
+NB=01-notebook.ipynb pixi run notebook
 NB=02-notebook.py pixi run notebook-marimo
 # on Windows: env:NB="01-notebook.ipynb"; pixi run notebook
 
 # Build distribution website
-pixi run dist
+pixi run render-site
 ```
 
 **Python development:**
@@ -204,17 +221,17 @@ df = load_data(RAW_DATA_DIR / "dataset.csv")
 ...
 ```
 
-## Publishing to Google drive
+## Publishing to Google Drive
 
-Set the `GOOGLE_FID` environment variable to the folder ID of the Google Drive folder to upload the paper to.
-Generate an access token with:
+Set `GOOGLE_FID` (Drive folder ID) and `RCLONE_DRIVE_TOKEN` in `.env`.
+To obtain a token:
 
 ```bash
-pixi run rclone authorize "drive"
+rclone authorize "drive"
+# Copy the printed JSON into RCLONE_DRIVE_TOKEN in .env
 ```
 
-Copy the token into the variable `RCLONE_DRIVE_TOKEN` in the `.env` file.
-Then publish the paper to Google Drive with:
+Then upload the PDF to Google Drive with:
 
 ```bash
 pixi run pub-gdrive

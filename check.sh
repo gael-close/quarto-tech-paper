@@ -26,8 +26,14 @@ if [ "$HTML_TITLE_FULL" != "$HTML_TITLE" ]; then
     echo "   (stripped subtitle from: $HTML_TITLE_FULL)"
 fi
 
-# Extract manuscript title from markdown file
-MANUSCRIPT_FILE="paper/manuscript/manuscript.md"
+# Extract manuscript title from markdown/qmd file
+MANUSCRIPT_FILE="paper/docs/paper.md"
+if [ ! -f "$MANUSCRIPT_FILE" ]; then
+    MANUSCRIPT_FILE="paper/docs/paper/paper.md"
+fi
+if [ ! -f "$MANUSCRIPT_FILE" ]; then
+    MANUSCRIPT_FILE="paper/manuscript/manuscript.md"
+fi
 if [ -f "$MANUSCRIPT_FILE" ]; then
     MANUSCRIPT_TITLE=$(grep -E "^title:" "$MANUSCRIPT_FILE" | head -1 | sed 's/^title:[[:space:]]*//')
     echo "📝 Manuscript title: $MANUSCRIPT_TITLE"

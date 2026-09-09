@@ -17,17 +17,10 @@ import typer
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    # Pydantic automatically looks for an environment variable named RCLONE_DRIVE_TOKEN
-    RCLONE_DRIVE_TOKEN: str 
+    RCLONE_DRIVE_TOKEN: str
     GOOGLE_FID: str | None = None
-    GOOGLE_ID: str | None = None
 
-    # Tell Pydantic to read from a local .env file if the OS variable isn't set
     model_config = SettingsConfigDict(env_file=here(".env"), extra="ignore")
-
-    @property
-    def google_id(self) -> str:
-        return self.GOOGLE_ID or self.GOOGLE_FID
 
 settings = Settings()
 
@@ -87,10 +80,10 @@ app = typer.Typer()
 @app.command()
 def main(
     name: str = typer.Option(..., "--name", help="Path to local file to upload"),
-    id: str = typer.Option(settings.google_id, "--id", help="Google Drive Folder ID")
+    id: str = typer.Option(settings.GOOGLE_FID, "--id", help="Google Drive Folder ID")
 ):
     if not id:
-        print("❌ Error: Google Drive Folder ID must be provided via --id option or env variables (GOOGLE_ID/GOOGLE_FID).")
+        print("❌ Error: Google Drive Folder ID must be provided via --id option or GOOGLE_FID in .env.")
         raise typer.Exit(code=1)
     update_or_upload_standalone(local_file_path=name, folder_id=id)
 
