@@ -46,7 +46,7 @@ build-backend = "setuptools.build_meta"
 
 
 # ---------------------------------------------------------------------------
-# PIXI — dependency and task management (do not edit unless you know what you are doing)
+# PIXI — dependency and task management
 # ---------------------------------------------------------------------------
 [tool.pixi.workspace]
 channels = ["conda-forge"]
