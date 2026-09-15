@@ -9,7 +9,7 @@ PROJ_ROOT = here()
 logger.info(f"PROJ_ROOT path is: {PROJ_ROOT}")
 
 DATA_DIR = PROJ_ROOT / "data"
-DIST_DIR = PROJ_ROOT / "dist"
+SUPP_DIR = PROJ_ROOT / "dist" / "supplementary"
 
 # Venv
 logger.info(f"Python executable: {sys.executable}")
