@@ -1,7 +1,9 @@
 pages:
   stage: deploy
+  script:
+    - echo "Deploying pre-built public directory to GitLab Pages"
   artifacts:
     paths:
-      - dist
-  only:
-    - main
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"

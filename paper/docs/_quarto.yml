@@ -1,4 +1,4 @@
 project:
-  output-dir: ../dist
+  output-dir: ../public
   render:
     - index.md

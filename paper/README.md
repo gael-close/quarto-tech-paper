@@ -13,10 +13,10 @@ pixi run setup         # install Quarto extensions + apply title
 ## Common tasks
 
 ```bash
-pixi run render-paper                    # render paper.qmd → dist/<TITLE>.pdf
-NB=01-notebook.ipynb pixi run notebook   # execute notebook → dist/supplementary/
+pixi run render-paper                    # render paper.qmd → public/<TITLE>.pdf
+NB=01-notebook.ipynb pixi run notebook   # execute notebook → public/supplementary/
 NB=02-notebook.py pixi run notebook-marimo
-pixi run render-site                     # build landing page → dist/index.html
+pixi run render-site                     # build landing page → public/index.html
 pixi run pub-gdrive                      # upload PDF to Google Drive
 ```
 
@@ -24,5 +24,5 @@ pixi run pub-gdrive                      # upload PDF to Google Drive
 
 - **Google Drive** — requires `rclone` on `PATH` and `RCLONE_DRIVE_TOKEN` in `.env`.
   Obtain a token once with `rclone authorize "drive"`.
-- **GitLab Pages** — `dist/` is deployed automatically via [`.gitlab-ci.yml`](.gitlab-ci.yml).
+- **GitLab Pages** — `public/` is deployed automatically via [`.gitlab-ci.yml`](.gitlab-ci.yml).
   Customize the landing page in [docs/index.md](docs/index.md).

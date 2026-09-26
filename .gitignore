@@ -27,7 +27,7 @@ _plots/
 *_files/
 _build/
 tmp/
-paper/dist/
+paper/public/
 
 # Quarto
 .quarto/

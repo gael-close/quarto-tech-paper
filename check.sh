@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
 # Consistency checker for render-all task
-# Verifies that titles and filenames match across dist/ artifacts
+# Verifies that titles and filenames match across public/ artifacts
 
 set -euo pipefail
 
-# Check the dist/ directory in the root of the project
-DIST_DIR="${DIST_DIR:-dist}"
+# Check the public/ directory in the root of the project
+PUBLIC_DIR="${PUBLIC_DIR:-public}"
 
-if [ ! -d "$DIST_DIR" ]; then
-    echo "❌ Error: dist/ directory not found at: $DIST_DIR"
+if [ ! -d "$PUBLIC_DIR" ]; then
+    echo "❌ Error: public/ directory not found at: $PUBLIC_DIR"
     echo "   Make sure to run this script from the project root."
     exit 1
 fi
 
 ERRORS=0
 
-echo "🔍 Checking dist/ consistency..."
+echo "🔍 Checking public/ consistency..."
 echo ""
 
 # Extract HTML title and strip subtitle (everything after " - " or " – " em dash)
-HTML_TITLE_FULL=$(grep -o '<title>[^<]*</title>' "$DIST_DIR/index.html" | sed 's/<title>\(.*\)<\/title>/\1/')
+HTML_TITLE_FULL=$(grep -o '<title>[^<]*</title>' "$PUBLIC_DIR/index.html" | sed 's/<title>\(.*\)<\/title>/\1/')
 HTML_TITLE=$(echo "$HTML_TITLE_FULL" | sed -E 's/ [–-] .*//')
 echo "📄 HTML title: $HTML_TITLE"
 if [ "$HTML_TITLE_FULL" != "$HTML_TITLE" ]; then
@@ -43,17 +43,17 @@ else
 fi
 
 # Find PDF file (should be exactly one)
-PDF_COUNT=$(find "$DIST_DIR" -maxdepth 1 -name "*.pdf" | wc -l | tr -d ' ')
+PDF_COUNT=$(find "$PUBLIC_DIR" -maxdepth 1 -name "*.pdf" | wc -l | tr -d ' ')
 if [ "$PDF_COUNT" -ne 1 ]; then
-    echo "❌ Error: Expected exactly 1 PDF file in dist/, found $PDF_COUNT"
+    echo "❌ Error: Expected exactly 1 PDF file in public/, found $PDF_COUNT"
     ERRORS=$((ERRORS + 1))
 else
-    PDF_FILE=$(find "$DIST_DIR" -maxdepth 1 -name "*.pdf" -print -quit)
+    PDF_FILE=$(find "$PUBLIC_DIR" -maxdepth 1 -name "*.pdf" -print -quit)
     PDF_BASENAME=$(basename "$PDF_FILE" .pdf)
     echo "📦 PDF filename: $PDF_BASENAME"
     
     # Extract iframe src
-    IFRAME_SRC=$(grep -o '<iframe[^>]*src="[^"]*"' "$DIST_DIR/index.html" | sed 's/.*src="\([^"]*\)".*/\1/' || echo "")
+    IFRAME_SRC=$(grep -o '<iframe[^>]*src="[^"]*"' "$PUBLIC_DIR/index.html" | sed 's/.*src="\([^"]*\)".*/\1/' || echo "")
     if [ -n "$IFRAME_SRC" ]; then
         # Strip .pdf extension for comparison
         IFRAME_TITLE=$(basename "$IFRAME_SRC" .pdf)

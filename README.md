@@ -9,10 +9,10 @@ where data analysis and visualization is done in Python.
 **Quarto** is used to render the paper as PDF, and the support materials (mostly Python notebooks) as HTML.
 A project landing page, which can be published online as a single entry point, is also generated based on <https://gael-close.github.io/quarto-tech-paper/>.
 
-An example of a [generated PDF](dist/Quarto%20Tech%20Paper%20Example.pdf) file is included 
-in the `dist/` folder.
+An example of a [generated PDF](public/Quarto%20Tech%20Paper%20Example.pdf) file is included 
+in the `public/` folder.
 
-<img width=800 src="dist/thumbnail.png">
+<img width=800 src="public/thumbnail.png">
 
 > See [the companion medium article](https://medium.com/data-science-collective/turning-your-notes-into-pdf-technical-memos-or-data-science-reports-ddd150273cc6)
 > for more background on the related Quarto Tech Memo, which serves as the template for the manuscript.
@@ -110,7 +110,7 @@ The skeleton also provides a project landing page example
 aggregating the project materials in a single page to be published online.
 Here is the included example: <https://gael-close.github.io/quarto-tech-paper>.
 
-<img width=800 src="dist/index.png">
+<img width=800 src="public/index.png">
 
 It is also rendered by Quarto for consistency.
 Other (non quarto) templates are available at: 
@@ -259,7 +259,7 @@ To run a complete test suite to check that everything is working as expected.
 ```bash
 task setup render-all save-example
 # Check manually
-open dist/contents.html
+open public/contents.html
 ```
 
 You can also download the template directly into another folder for testing:

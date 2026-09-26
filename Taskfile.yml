@@ -30,17 +30,17 @@ tasks:
   view:
     desc: View all generated files (paper PDF and supplementary HTML)
     cmds: 
-      - open dist/*.pdf
-      - open dist/supplementary/01-notebook.html
-      - open dist/supplementary/02-notebook.html
+      - open public/*.pdf
+      - open public/supplementary/01-notebook.html
+      - open public/supplementary/02-notebook.html
     dir: paper
   
   save-example:
     desc: Distribute the landing page as an example (with Quarto site sidebar)
     cmds:
       - |
-        rm -rf dist && mkdir dist && cp -R paper/dist/* dist/
-        cd dist
+        rm -rf public && mkdir public && cp -R paper/public/* public/
+        cd public
         magick -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png 2>/dev/null && echo "✓ Thumbnail: thumbnail.png" || echo "⚠ Thumbnail generation skipped"
         PROJECT_DIR="$(cd ../paper && pwd)" SCREENSHOT_WIDTH=1280 SCREENSHOT_HEIGHT=900 SCREENSHOT_WAIT=3000 chrome-screenshot.sh "$(pwd)/index.html" index.png && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
       - cmd: ./check.sh
@@ -49,7 +49,7 @@ tasks:
   test-all:
     desc: Run all tests from scratch
     cmds:
-    - rm -rf paper/dist && mkdir -p paper/dist/supplementary
+    - rm -rf paper/public && mkdir -p paper/public/supplementary
     - task: setup
     - task: render-all
     - task: save-example
