@@ -10,15 +10,6 @@ abstract: |
   One could also embed video, images, and other media.
 page-layout: full
 lightbox: true
-
-format:
-  html:
-    toc: true
-    toc-depth: 3
-    toc-location: right
-    toc-title: "Contents"
-    standalone: true
-    embed-resources: true
 ---
 
 
