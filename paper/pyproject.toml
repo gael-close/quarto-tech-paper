@@ -1,0 +1,121 @@
+# ---------------------------------------------------------------------------
+# USER CONFIGURATION — edit this section to customize your paper
+# ---------------------------------------------------------------------------
+[tool.pixi.activation.env]
+SHORT_TITLE = "Quarto Tech Paper Example"   # PDF filename and paper title
+
+[project]
+name = "my_package"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "forallpeople>=2.7.0",
+    "holoviews>=1.19.1",
+    "hvplot>=0.11.0",
+    "icecream>=2.1.3",
+    "loguru>=0.7.3",
+    "matplotlib>=3.9.2",
+    "numpy>=2.1.2",
+    "pandas>=2.2.3",
+    "platformdirs>=4.0.0",
+    "pydantic-settings>=2.0.0",
+    "pydrive2>=1.20.0",
+    "pyprojroot>=0.3.0",
+    "pytest>=8.4.2",
+    "python-box>=7.2.0",
+    "seaborn>=0.13.2",
+    "sigfig>=1.3.3",
+    "sitepath>=0.4.0",
+    "summarytools>=0.3.0",
+    "typer>=0.16.1",
+    "watermark>=2.5.0",
+    "jupyterlab>=4.2.5",
+    "jupytext>=1.16.4",
+    "marimo>=0.20.4",
+    "notebook>=7.2.2",
+    "ipykernel>=7.2.0",
+    "quarto-tech-memo",
+]
+
+[project.scripts]
+plots = "my_package.plots:app"
+
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+
+# ---------------------------------------------------------------------------
+# PIXI — dependency and task management
+# ---------------------------------------------------------------------------
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["osx-64", "osx-arm64", "linux-64"]
+
+[tool.pixi.dependencies]
+uv = "*"
+quarto = "*"
+sd = "*"
+gh = "*"
+tree = ">=2.0.0" # This installs the Unix-style engine even on Windows!
+
+[tool.pixi.target.unix.dependencies]
+tree = "*"
+
+[tool.pixi.pypi-dependencies]
+my_package = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+check-import = "python -c 'import my_package; print(\"SUCCESS!\")'"
+basic-test = "pytest -s"
+
+render-paper = { cmd = """
+quarto render paper.md --to memo2-typst && \
+mv paper.pdf "../public/$SHORT_TITLE.pdf"
+""", cwd = "docs" }
+
+notebook = """
+jupyter nbconvert --to notebook --inplace --execute notebooks/$NB && \
+quarto render notebooks/$NB --to html --output-dir ../public/supplementary --embed-resources --toc
+"""
+
+notebook-marimo = """
+BASE=$(basename $NB .py) && \
+marimo export html notebooks/$BASE.py -o public/supplementary/$BASE.html"""
+
+render-site = """
+quarto render docs/ && \
+sd 'paper.pdf' "$SHORT_TITLE.pdf" public/index.html && \
+(cd public && tree -H '' -T 'My Project' -l -L 3 --noreport -o contents.html) \
+"""
+
+pub-gdrive = { cmd = """
+uv run python ../scripts/upload-to-gdrive.py --name "$SHORT_TITLE.pdf"
+""", cwd = "public" }
+
+setup = { cmd = """
+quarto add gael-close/quarto-tech-memo --no-prompt && \
+sd '^title:.*' "title: $SHORT_TITLE" paper.md && \
+sd '^title:.*' "title: $SHORT_TITLE" index.md
+""", cwd = "docs" }
+
+setup-local = { cmd = """
+quarto add ../../../quarto-tech-memo --no-prompt && \
+sd '^title:.*' "title: $SHORT_TITLE" paper.md && \
+sd '^title:.*' "title: $SHORT_TITLE" index.md
+""", cwd = "docs" }
+
+
+
+[tool.jupytext]
+formats = "ipynb,py:percent"
+notebook_metadata_filter="-all"
+
+[tool.pytest.ini_options]
+addopts = "--disable-warnings"
+testpaths = ["tests/"]
+python_files = ["test_*.py", "test-*.py"]
+norecursedirs = [".git", ".venv", "src"]
+log_cli = true
+log_cli_level = "INFO"
+

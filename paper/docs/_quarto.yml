@@ -1,0 +1,24 @@
+project:
+  output-dir: ../public
+  render:
+    - index.md
+
+website:
+  search: false
+  navbar: false
+
+format:
+  html:
+    theme:
+      - materia
+      - _extensions/page/custom.scss
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    toc-title: "Contents"
+    standalone: true
+    embed-resources: true
+    html-math-method: mathjax
+    other-formats: false
+    format-links: false
+    page-layout: article

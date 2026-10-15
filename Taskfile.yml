@@ -1,0 +1,70 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+dotenv:
+  - 'paper/.env'
+  - '.env'
+
+tasks:
+  setup:
+    vars:
+      GITHUB: '{{.GITHUB | default "false"}}'
+    desc: |
+      Setup the project.
+      GITHUB=false (default): use the local ../quarto-tech-memo extension.
+      GITHUB=true:            use the online gael-close/quarto-tech-memo.
+    cmds:
+      - |
+        if [ "{{.GITHUB}}" = "true" ]; then
+          uvx cookiecutter -f gh:gael-close/quarto-tech-memo --no-input directory='docs' filename='paper'
+        else
+          uvx cookiecutter -f ../../quarto-tech-memo --no-input directory='docs' filename='paper'
+        fi
+      - pixi install
+      - |
+        if [ "{{.GITHUB}}" = "true" ]; then
+          pixi run setup
+        else
+          pixi run setup-local
+        fi
+    dir: paper
+  
+  
+  render-all:
+    desc: Render all supplementary materials and the paper
+    cmds:
+    - NB=01-notebook.ipynb pixi run notebook
+    - NB=02-notebook.py pixi run notebook-marimo
+    - pixi run render-paper
+    - pixi run render-site
+    dir: paper
+
+
+  view:
+    desc: View all generated files (paper PDF and supplementary HTML)
+    cmds: 
+      - open public/*.pdf
+      - open public/supplementary/01-notebook.html
+      - open public/supplementary/02-notebook.html
+    dir: paper
+  
+  save-example:
+    desc: Distribute the landing page as an example (with Quarto site sidebar)
+    cmds:
+      - |
+        rm -rf public && mkdir public && cp -R paper/public/* public/
+        cd public
+        magick -density 150 *.pdf -quality 90 -background white -alpha remove thumbnail.png 2>/dev/null && echo "✓ Thumbnail: thumbnail.png" || echo "⚠ Thumbnail generation skipped"
+        uvx shot-scraper shot index.html -o index.png --width 1280 --height 900 --wait 3000 && echo "✓ Screenshot: index.png" || echo "⚠ Screenshot failed"
+      - cmd: ./check.sh
+       
+  
+  test-all:
+    desc: Run all tests from scratch
+    cmds:
+    - rm -rf paper/public && mkdir -p paper/public/supplementary
+    - task: setup
+    - task: render-all
+    - task: save-example
+    - task: view
+  
