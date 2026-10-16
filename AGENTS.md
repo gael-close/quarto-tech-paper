@@ -8,6 +8,11 @@ This is a Python research/data science project built with `uv` for dependency ma
 
 **Key Technologies:** Python 3.10+, Quarto, Jupyter/Marimo notebooks, Taskfile, Pytest
 
+### Workspace & Related Repositories
+
+- **Two independent Git repositories**: Both the current directory (`.` / `quarto-tech-paper`) and `../quarto-tech-memo` are separate Git repositories with their own commit histories and remotes. Run `git` commands in the appropriate repository directory for the files being inspected or modified.
+- **`../quarto-tech-memo`**: The companion Quarto extension and Cookiecutter template repository is part of the active workspace/session (also configured in `quarto-tech-paper.code-workspace` and used by `task setup` when `GITHUB=false`). Include `../quarto-tech-memo` in the session context when inspecting or modifying manuscript templates, Quarto extensions, or setup workflows.
+
 ## Build, Lint & Test Commands
 
 ### Setup & Dependencies
